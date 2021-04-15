@@ -45,9 +45,9 @@ pickle.dump(names, file_name)
 file_short_name = open('pickle/file_short_name.pickle', 'wb')
 pickle.dump(short_names, file_short_name)
 
-print(codes)
+'''print(codes)
 print(names)
-print(short_names)
+print(short_names)'''
 
 
 
