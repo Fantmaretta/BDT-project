@@ -37,6 +37,7 @@ for name in root.findall('.//{http://www.meteotrentino.it/}nome'):
 for short_name in root.findall('.//{http://www.meteotrentino.it/}nomebreve'):
     short_names.append(short_name.text)
 
+# save lists into pickles
 file_code = open('pickle/file_code.pickle', 'wb')
 pickle.dump(codes, file_code)
 file_name = open('pickle/file_name.pickle', 'wb')
