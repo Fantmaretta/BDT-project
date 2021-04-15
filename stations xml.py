@@ -4,6 +4,7 @@ import requests
 import xml.etree.cElementTree as ET
 from xml.parsers import expat
 from lxml import etree
+import pickle
 
 # url stations anagrafica
 url_stations_anagrafica = "http://dati.meteotrentino.it/service.asmx/listaStazioni"
@@ -35,6 +36,13 @@ for name in root.findall('.//{http://www.meteotrentino.it/}nome'):
 # get all the short names
 for short_name in root.findall('.//{http://www.meteotrentino.it/}nomebreve'):
     short_names.append(short_name.text)
+
+file_code = open('pickle/file_code.pickle', 'wb')
+pickle.dump(codes, file_code)
+file_name = open('pickle/file_name.pickle', 'wb')
+pickle.dump(names, file_name)
+file_short_name = open('pickle/file_short_name.pickle', 'wb')
+pickle.dump(short_names, file_short_name)
 
 print(codes)
 print(names)
