@@ -1,3 +1,6 @@
+from typing import List
+
+
 class Icon:
 
     def __init__(self, id_icon: int, icon: str, desc_icon: str):
@@ -50,7 +53,7 @@ class Range:
 
 class Day:
 
-    def __init__(self, id: int, id_pred_day: int, day: str, icon: Icon, desc_day: str, tmin: float, tmax: float, ranges: list[Range]):
+    def __init__(self, id: int, id_pred_day: int, day: str, icon: Icon, desc_day: str, tmin: float, tmax: float, ranges: List[Range]):
         self.id = id
         self.id_pred_day = id_pred_day
         self.day = day
@@ -62,14 +65,14 @@ class Day:
 
 class Prediction:
 
-    def __init__(self, id_locality: int, locality: str, days: list[Day]):
+    def __init__(self, id_locality: int, locality: str, days: List[Day]):
         self.id_locality = id_locality
         self.id_locality = locality
         self.days = days
 
 class TotPrediction:
 
-    def __init__(self, id_prediction: int, date: str, evolution: str, short_evolution: str, predictions: list[Prediction]):
+    def __init__(self, id_prediction: int, date: str, evolution: str, short_evolution: str, predictions: List[Prediction]):
         self.id_prediction = id_prediction
         self.date = date
         self.evolution = evolution
