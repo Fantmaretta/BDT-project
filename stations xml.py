@@ -9,6 +9,12 @@ import pickle
 class StationAnagrafica:
     
     def get_station_anagrafica(self, url_stations_anagrafica, file_station_name):
+        '''
+        
+        :param url_stations_anagrafica:
+        :param file_station_name:
+        :return:
+        '''
         # file_station_name = 'stations.xml'
 
         # url stations anagrafica
