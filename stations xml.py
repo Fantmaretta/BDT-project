@@ -6,48 +6,59 @@ from xml.parsers import expat
 from lxml import etree
 import pickle
 
-# url stations anagrafica
-url_stations_anagrafica = "http://dati.meteotrentino.it/service.asmx/listaStazioni"
-# request get
-resp_stat = requests.get(url_stations_anagrafica)
-#print(resp_stat.content)
+class StationAnagrafica:
+    
+    def get_station_anagrafica(self, url_stations_anagrafica, file_station_name):
+        # file_station_name = 'stations.xml'
 
-# create xml file
-with open('stations.xml', 'wb') as f:
-    f.write(resp_stat.content)
+        # url stations anagrafica
+        #url_stations_anagrafica = "http://dati.meteotrentino.it/service.asmx/listaStazioni"
+        # request get
+        resp_stat = requests.get(url_stations_anagrafica)
+        #print(resp_stat.content)
 
-# create tree
-tree = ET.parse("file.xml")
+        # create xml file
+        with open(file_station_name, 'wb') as f:
+            f.write(resp_stat.content)
 
-# get root element
-root = tree.getroot()
+        # create tree
+        tree = ET.parse(file_station_name)
 
-# initialize interesting lists -> code, name, short name of all the stations
-codes = []
-names = []
-short_names = []
+        # get root element
+        root = tree.getroot()
 
-# get all the codes
-for code in root.findall('.//{http://www.meteotrentino.it/}codice'):
-    codes.append(code.text)
-# get all the names
-for name in root.findall('.//{http://www.meteotrentino.it/}nome'):
-    names.append(name.text)
-# get all the short names
-for short_name in root.findall('.//{http://www.meteotrentino.it/}nomebreve'):
-    short_names.append(short_name.text)
+        # initialize interesting lists -> code, name, short name of all the stations
+        codes = []
+        names = []
+        short_names = []
 
-# save lists into pickles
-file_code = open('pickle/file_code.pickle', 'wb')
-pickle.dump(codes, file_code)
-file_name = open('pickle/file_name.pickle', 'wb')
-pickle.dump(names, file_name)
-file_short_name = open('pickle/file_short_name.pickle', 'wb')
-pickle.dump(short_names, file_short_name)
+        # get all the codes
+        for code in root.findall('.//{http://www.meteotrentino.it/}codice'):
+            codes.append(code.text)
+        # get all the names
+        for name in root.findall('.//{http://www.meteotrentino.it/}nome'):
+            names.append(name.text)
+        # get all the short names
+        for short_name in root.findall('.//{http://www.meteotrentino.it/}nomebreve'):
+            short_names.append(short_name.text)
 
-'''print(codes)
-print(names)
-print(short_names)'''
+        # save lists into pickles
+        file_code = open('pickle/file_code.pickle', 'wb')
+        pickle.dump(codes, file_code)
+        file_name = open('pickle/file_name.pickle', 'wb')
+        pickle.dump(names, file_name)
+        file_short_name = open('pickle/file_short_name.pickle', 'wb')
+        pickle.dump(short_names, file_short_name)
+
+        print(codes)
+        print(names)
+        print(short_names)
+
+
+
+# questo da spostere nel main
+station_anagrafica = StationAnagrafica()
+station_anagrafica.get_station_anagrafica("http://dati.meteotrentino.it/service.asmx/listaStazioni", 'stations.xml')
 
 
 
