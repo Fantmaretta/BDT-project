@@ -1,0 +1,41 @@
+import requests
+from typing import List
+
+import pickle
+
+class Fetch:
+
+    def fetch_prediction(self, url_prediction: str):
+
+        #url_prediction = "https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita"
+        resp_pred = requests.get(url_prediction)
+        prediction = resp_pred.json()
+        #print(prediction)
+        return prediction
+
+    def fetch_data(self, url_data: str, list_station_code: List[str]):
+
+        list_resp_data = [requests.get(url_data + station_id) for station_id in list_station_code]
+        return list_resp_data
+
+        '''for i in list_resp_data:
+            print(i.content)'''
+        '''url_data = "http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=T0153"
+        resp_data = requests.get(url_data)
+        print(resp_data.content)'''
+
+# da mettere nel main
+fetch = Fetch()
+
+fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
+
+file = open("/home/veror/PycharmProjects/BDT project/pickle/file_code.pickle",'rb')
+list_station_code = pickle.load(file)
+print(list_station_code)
+fetch.fetch_data("http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=T0153", list_station_code)
+
+#data = resp_data.xml()
+
+#print(stations)
+
+#print(prediction["previsione"][0])
