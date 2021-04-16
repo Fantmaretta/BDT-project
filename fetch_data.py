@@ -52,12 +52,16 @@ class Fetch:
 # da mettere nel main
 fetch = Fetch()
 
+
 file = open("/home/veror/PycharmProjects/BDT project/pickle/file_name.pickle",'rb')
 list_station_name = pickle.load(file)
-x = fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
 
+# prediction
+x = fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
 #list_station_name.remove('daone')
 print(list_station_name)
+
+# data
 new = fetch.remove_not_station(x, list_station_name)
 for pred in new:
     # print(pred)
