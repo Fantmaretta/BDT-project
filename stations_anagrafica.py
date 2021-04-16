@@ -5,6 +5,7 @@ import xml.etree.cElementTree as ET
 from xml.parsers import expat
 from lxml import etree
 import pickle
+import re
 
 class StationAnagrafica:
     
@@ -43,10 +44,16 @@ class StationAnagrafica:
             codes.append(code.text)
         # get all the names
         for name in root.findall('.//{http://www.meteotrentino.it/}nome'):
-            names.append(name.text)
+            # remove part of the name in parenthesis
+            modified_name = re.sub(r" \([^()]*\)", "", name.text)
+            names.append(modified_name.lower())
+        # remove duplicates
+        set_modified_name = set(names)
+        names = list(set_modified_name)
         # get all the short names
         for short_name in root.findall('.//{http://www.meteotrentino.it/}nomebreve'):
             short_names.append(short_name.text)
+
 
         # save lists into pickles
         file_code = open('pickle/file_code.pickle', 'wb')
