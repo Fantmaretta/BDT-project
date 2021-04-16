@@ -6,7 +6,11 @@ import pickle
 class Fetch:
 
     def fetch_prediction(self, url_prediction: str):
+        '''
 
+        :param url_prediction:
+        :return:
+        '''
         #url_prediction = "https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita"
         resp_pred = requests.get(url_prediction)
         prediction = resp_pred.json()
@@ -14,7 +18,12 @@ class Fetch:
         return prediction
 
     def fetch_data(self, url_data: str, list_station_code: List[str]):
+        '''
 
+        :param url_data:
+        :param list_station_code:
+        :return:
+        '''
         list_resp_data = [requests.get(url_data + station_id) for station_id in list_station_code]
         return list_resp_data
 
