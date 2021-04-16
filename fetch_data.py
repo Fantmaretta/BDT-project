@@ -17,6 +17,19 @@ class Fetch:
         #print(prediction)
         return prediction
 
+    def remove_not_station(self, prediction_json: dict, list_stations):
+        '''
+
+        :param prediction_json:
+        :return:
+        '''
+        for pred in prediction_json['previsione']:
+            #print(pred)
+            if pred['localita'].lower() not in list_stations:
+                print(pred['localita'].lower())
+                print(prediction_json['previsione'][pred])
+                del prediction_json['previsione'][pred]
+
     def fetch_data(self, url_data: str, list_station_code: List[str]):
         '''
 
@@ -36,13 +49,16 @@ class Fetch:
 # da mettere nel main
 fetch = Fetch()
 
-fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
+file = open("/home/veror/PycharmProjects/BDT project/pickle/file_name.pickle",'rb')
+list_station_name = pickle.load(file)
+x = fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
+print(fetch.remove_not_station(x, list_station_name))
 
-file = open("/home/veror/PycharmProjects/BDT project/pickle/file_code.pickle",'rb')
+'''file = open("/home/veror/PycharmProjects/BDT project/pickle/file_code.pickle",'rb')
 list_station_code = pickle.load(file)
 print(list_station_code)
 fetch.fetch_data("http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=T0153", list_station_code)
-
+'''
 #data = resp_data.xml()
 
 #print(stations)
