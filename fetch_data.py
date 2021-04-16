@@ -17,18 +17,21 @@ class Fetch:
         #print(prediction)
         return prediction
 
-    def remove_not_station(self, prediction_json: dict, list_stations):
+    def remove_not_station(self, prediction_json: dict, list_stations): # remove from the json the localities not matching with a meteo station
         '''
 
         :param prediction_json:
         :return:
         '''
-        for pred in prediction_json['previsione']:
-            #print(pred)
-            if pred['localita'].lower() not in list_stations:
-                print(pred['localita'].lower())
-                print(prediction_json['previsione'][pred])
-                del prediction_json['previsione'][pred]
+        list_localities = []
+        for pred in prediction_json['previsione']: # prediction_json['previsione'] -> type = list
+            if pred['localita'].lower() in list_stations:
+                #print(pred['localita'].lower())
+                #print(prediction_json['previsione'][])
+                list_localities.append(pred)
+                #prediction_json['previsione'].remove(pred)
+                #del pred
+        return list_localities
 
     def fetch_data(self, url_data: str, list_station_code: List[str]):
         '''
@@ -52,7 +55,13 @@ fetch = Fetch()
 file = open("/home/veror/PycharmProjects/BDT project/pickle/file_name.pickle",'rb')
 list_station_name = pickle.load(file)
 x = fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
-print(fetch.remove_not_station(x, list_station_name))
+
+#list_station_name.remove('daone')
+print(list_station_name)
+new = fetch.remove_not_station(x, list_station_name)
+for pred in new:
+    # print(pred)
+    print(pred['localita'])
 
 '''file = open("/home/veror/PycharmProjects/BDT project/pickle/file_code.pickle",'rb')
 list_station_code = pickle.load(file)
