@@ -1,19 +1,3 @@
-import requests
-
-url_prediction = "https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita"
-
-resp_pred = requests.get(url_prediction)
-prediction = resp_pred.json()
-
-url_data = "http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=T0153"
-resp_data = requests.get(url_data)
-print(resp_data.content)
-#data = resp_data.xml()
-
-#print(stations)
-
-#print(prediction["previsione"][0])
-
 class Icon:
 
     def __init__(self, id_icon: int, icon: str, desc_icon: str):
