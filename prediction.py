@@ -1,6 +1,6 @@
 from typing import List
 
-
+# TODO decide how to structure , from json to ->
 class Icon:
 
     def __init__(self, id_icon: int, icon: str, desc_icon: str):
