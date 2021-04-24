@@ -65,8 +65,9 @@ class Fetch:
         schedule.every().hour.do(self.fetch_prediction, url_pred)
         schedule.every().day.do(self.fetch_prediction, url_pred)
         # fetch data
-        schedule.every().hour.do(self.fetch_data, url_data, list_station_code)
-        schedule.every().day.do(self.fetch_data, url_data, list_station_code)
+        # TODO here we can set just a single time to have all the data of the entire day before
+        #schedule.every().hour.do(self.fetch_data, url_data, list_station_code)
+        schedule.every().day.at("00:01").do(self.fetch_data, url_data, list_station_code)
         while True:
             schedule.run_pending()
             time.sleep(1)
