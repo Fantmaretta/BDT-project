@@ -71,7 +71,7 @@ class Fetch:
             schedule.run_pending()
             time.sleep(1)
 
-
+# TODO connect DB -> relational? mysql
 
 # da mettere nel main
 fetch = Fetch()
