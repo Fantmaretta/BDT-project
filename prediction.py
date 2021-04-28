@@ -67,8 +67,24 @@ class Prediction:
 
     def __init__(self, id_locality: int, locality: str, days: List[Day]):
         self.id_locality = id_locality
-        self.id_locality = locality
+        self.locality = locality
         self.days = days
+
+    def to_repr(self) -> dict:
+        return {
+            "id_locality": self.id_locality,
+            "locality": self.locality,
+            "days": self.days
+        }
+
+    @staticmethod
+    def from_repr(prediction_dict):
+        return Prediction(
+            prediction_dict["id_locality"],
+            prediction_dict["locality"],
+            prediction_dict["days"]
+        )
+
 
 class TotPrediction:
 
