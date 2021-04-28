@@ -19,8 +19,9 @@ class Fetch:
 
     def remove_not_station(self, prediction_json: dict, list_stations):
         '''
-        It removes from the json the localities not matching a meteo station
+
         :param prediction_json:
+        :param list_stations: pickle list of stations names
         :return:
         '''
         list_localities = []
@@ -31,6 +32,7 @@ class Fetch:
                 list_localities.append(pred)
                 #prediction_json['previsione'].remove(pred)
                 #del pred
+
         return list_localities
 
     def fetch_data(self, url_data: str, list_station_code: List[str]):
@@ -77,9 +79,27 @@ class Fetch:
 # da mettere nel main
 fetch = Fetch()
 
-file = open("/home/veror/PycharmProjects/BDT project/pickle/file_code.pickle",'rb')
-list_station_code = pickle.load(file)
-pred_e_data = fetch.fetch_all("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita", "http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=", list_station_code)
+#file = open("/home/veror/PycharmProjects/BDT project/pickle/file_code.pickle",'rb')
+#list_station_code = pickle.load(file)
+#pred_e_data = fetch.fetch_all("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita", "http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=", list_station_code)
+
+#x = fetch.fetch_data("http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=", list_station_code)
+
+file = open("/home/veror/PycharmProjects/BDT project/pickle/file_name.pickle",'rb')
+list_station_name = pickle.load(file)
+y = fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
+y_new = fetch.remove_not_station(y, list_station_name)
+
+'''for i in y_new:
+    print(i , '\n')'''
+
+print(len(y_new))
+print(y_new)
+print(list_station_name)
+print(len(list_station_name))
+
+
+
 
 
 #print(fetch.fetch_all("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita"))
