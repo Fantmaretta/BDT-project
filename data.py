@@ -1,7 +1,7 @@
 import datetime
 
 class Data:
-    def __init__(self, data: datetime, tmin: float, tmax: float, rain: float, temperatura: float, precipitazioni: float, venti: dict, radiazione: float, umidita_relativa: float):
+    def __init__(self, data: datetime, tmin: float, tmax: float, rain: float, temperatura: dict, precipitazioni: dict, venti: dict, radiazione: dict, umidita_relativa: dict):
         self.data = data
         self.tmin = tmin
         self.tmax = tmax
