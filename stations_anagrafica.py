@@ -11,7 +11,8 @@ class StationAnagrafica:
     
     def get_station_anagrafica(self, url_stations_anagrafica, file_station_name):
         '''
-
+        given the url with stations information and the name of the file that will contain stations names, it extracts
+        stations codes, names and short names and saves them into pickle files
         :param url_stations_anagrafica:
         :param file_station_name:
         :return:
@@ -63,9 +64,9 @@ class StationAnagrafica:
         file_short_name = open('pickle/file_short_name.pickle', 'wb')
         pickle.dump(short_names, file_short_name)
 
-        print(codes)
+        '''print(codes)
         print(names)
-        print(short_names)
+        print(short_names)'''
 
 
 
