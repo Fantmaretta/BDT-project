@@ -1,0 +1,177 @@
+1) PROCESS TO CONNECT EC2 INSTANCE (AFTER HAVING CREATED IT)
+
+veror@veror-Swift-SF314-52:~$ cd Downloads/
+veror@veror-Swift-SF314-52:~/Downloads$ shh
+
+Command 'shh' not found, did you mean:
+
+  command 'shc' from deb shc (4.0.3-0.1)
+  command 'ssh' from deb openssh-client (1:8.2p1-4ubuntu0.2)
+  command 'sh' from deb dash (0.5.10.2-6)
+  command 'sch' from deb scheme2c (2012.10.14-1ubuntu1)
+
+Try: sudo apt install <deb name>
+
+veror@veror-Swift-SF314-52:~/Downloads$ ssh
+usage: ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface]
+           [-b bind_address] [-c cipher_spec] [-D [bind_address:]port]
+           [-E log_file] [-e escape_char] [-F configfile] [-I pkcs11]
+           [-i identity_file] [-J [user@]host[:port]] [-L address]
+           [-l login_name] [-m mac_spec] [-O ctl_cmd] [-o option] [-p port]
+           [-Q query_option] [-R address] [-S ctl_path] [-W host:port]
+           [-w local_tun[:remote_tun]] destination [command]
+veror@veror-Swift-SF314-52:~/Downloads$ ssh -i bdt-proj.pem ubuntu@ec2-3-129-69-135.us-east-2.compute.amazonaws.com
+The authenticity of host 'ec2-3-129-69-135.us-east-2.compute.amazonaws.com (3.129.69.135)' can't be established.
+ECDSA key fingerprint is SHA256:4qZc2Eo56mTyjPVIyvaTlRqY/ZP4pV/pJ8AAga7Sb/w.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'ec2-3-129-69-135.us-east-2.compute.amazonaws.com,3.129.69.135' (ECDSA) to the list of known hosts.
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Permissions 0664 for 'bdt-proj.pem' are too open.
+It is required that your private key files are NOT accessible by others.
+This private key will be ignored.
+Load key "bdt-proj.pem": bad permissions
+ubuntu@ec2-3-129-69-135.us-east-2.compute.amazonaws.com: Permission denied (publickey).
+veror@veror-Swift-SF314-52:~/Downloads$ ^C
+veror@veror-Swift-SF314-52:~/Downloads$ sudo chmod 600 bdt-proj.pem 
+[sudo] password for veror: 
+veror@veror-Swift-SF314-52:~/Downloads$ ssh -i bdt-proj.pem ubuntu@ec2-3-129-69-135.us-east-2.compute.amazonaws.com
+Welcome to Ubuntu 20.04.2 LTS (GNU/Linux 5.4.0-1038-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Wed Apr 21 13:49:15 UTC 2021
+
+  System load:  0.0               Processes:             100
+  Usage of /:   16.3% of 7.69GB   Users logged in:       0
+  Memory usage: 22%               IPv4 address for eth0: 172.31.6.136
+  Swap usage:   0%
+
+1 update can be installed immediately.
+0 of these updates are security updates.
+To see these additional updates run: apt list --upgradable
+
+
+
+
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+
+
+2) VIM
+ubuntu@ip-172-31-6-136:~$ vim
+ubuntu@ip-172-31-6-136:~$ vim
+ubuntu@ip-172-31-6-136:~$ python test.py 
+
+Command 'python' not found, did you mean:
+
+  command 'python3' from deb python3
+  command 'python' from deb python-is-python3
+
+ubuntu@ip-172-31-6-136:~$ python3 test.py 
+hello wolrd
+
+
+-> NB: ubuntu@your_dns = ubuntu@ec2-3-129-69-135.us-east-2.compute.amazonaws.com (where the part after @ is the link related to our ec2 instance, to access to it from everyone ad "viewer")
+
+3) TMUX
+ubuntu@ip-172-31-6-136:~$ tmux
+[detached (from session 0)]
+ubuntu@ip-172-31-6-136:~$ logout
+Connection to ec2-3-129-69-135.us-east-2.compute.amazonaws.com closed.
+veror@veror-Swift-SF314-52:~/Downloads$ ssh -i bdt-proj.pem ubuntu@ec2-3-129-69-135.us-east-2.compute.amazonaws.com
+Welcome to Ubuntu 20.04.2 LTS (GNU/Linux 5.4.0-1038-aws x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Wed Apr 21 13:58:51 UTC 2021
+
+  System load:  0.0               Processes:             103
+  Usage of /:   16.4% of 7.69GB   Users logged in:       0
+  Memory usage: 23%               IPv4 address for eth0: 172.31.6.136
+  Swap usage:   0%
+
+
+1 update can be installed immediately.
+0 of these updates are security updates.
+To see these additional updates run: apt list --upgradable
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+Last login: Wed Apr 21 13:49:17 2021 from 37.161.49.82
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+ubuntu@ip-172-31-6-136:~$ tmux ls
+0: 2 windows (created Wed Apr 21 13:57:57 2021)
+ubuntu@ip-172-31-6-136:~$ tmux a -t 0
+[detached (from session 0)]
+ubuntu@ip-172-31-6-136:~$ 
+
+
+
+
+4) PUBLIC/PRIVATE KEY (BDT PROJECT)
+-> stanno in /home/veror/.ssh (.ssh cartella invisibile)
+PRIVATE: bdt-proj (.pem)
+PUBLIC: bdt_key_git (.pub)
+
+
+
+5) CONNECT GITHUB TO EC2
+https://github.com/yafangy/Tutorial-using-Amazon-AWS-EC2-run-scripts-GitHub
+BUT: before last step of cloning, used this command to make it works -> ssh-keyscan github.com >> ~/.ssh/known_hosts (https://gist.github.com/vikpe/34454d69fe03a9617f2b009cc3ba200b)
+
+
+
+6) .SSH FOLDER -> CONTAINING KEYS
+veror@veror-Swift-SF314-52:~/.ssh$ ls
+bdt_key_git  bdt_key_git.pub  bdt-proj.pem  known_hosts
+
+
+
+7) START CONNECTION TO EC2 TO RUN CODE ON IT
+veror@veror-Swift-SF314-52: cd .ssh   # since it contains bdt-proj.pem
+here in .ssh run this:
+ssh -i bdt-proj.pem ubuntu@ec2-3-129-69-135.us-east-2.compute.amazonaws.com
+
+
+
+8) download stuff from ec2 -> launch the command from local terminal
+veror@veror-Swift-SF314-52:~$ scp -i .ssh/bdt-proj.pem -r ubuntu@ec2-3-129-69-135.us-east-2.compute.amazonaws.com:BDT-project ~/Desktop
+# BDT-project is the folder on the remote machine where we have rthe code
+# ~/Desktop is where we save the downloaded files
+
+
+
+9) connect to ec2 instance
+veror@veror-Swift-SF314-52:$ cd /.ssh 
+veror@veror-Swift-SF314-52:$~.ssh ssh -i bdt-proj.pem ubuntu@ec2-3-129-69-135.us-east-2.compute.amazonaws.com
+OPPURE
+veror@veror-Swift-SF314-52:$ ssh -i .ssh/bdt-proj.pem ubuntu@ec2-3-129-69-135.us-east-2.compute.amazonaws.com
+
+
+
+
+
