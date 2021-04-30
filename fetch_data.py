@@ -24,16 +24,38 @@ class Fetch:
         :param list_stations: pickle list of stations names
         :return:
         '''
-        list_localities = []
+        list_predictions = []
         for pred in prediction_json['previsione']: # prediction_json['previsione'] -> type = list
             if pred['localita'].lower() in list_stations:
-                #print(pred['localita'].lower())
-                #print(prediction_json['previsione'][])
-                list_localities.append(pred)
+                for giorno in pred['giorni']:
+                    for fascia in giorno['fasce']:
+                        el = {}
+                        el['localita'] = pred['localita'].lower()
+                        el['data'] = giorno['giorno']
+                        el['id_previsione_giorno'] = giorno
+                        el['temp_min'] = pred['tMinGiorno'] # on all day
+                        el['temp_max'] = pred['tMaxGiorno'] # on all day
+                        # info below here are referred to the single fascia
+                        el['id_prec_prob'] = fascia['idPrecProb']
+                        el['desc_prec_prob'] = fascia['descPrecProb']
+                        el['id_prec_int'] = fascia['idPrecInten']
+                        el['desc_prec_int'] = fascia['descPrecInten']
+                        el['id_alt'] = fascia['idVentoIntQuota']
+                        el['desc_alt'] = fascia['descVentoIntQuota']
+                        el['id_dir_alt'] = fascia['idVentoDirQuota']
+                        el['desc_dir_alt'] = fascia['descrVentoDirQuota']
+                        el['id_val'] = fascia['idVentoIntValle']
+                        el['desc_val'] = fascia['descVentoIntValle']
+                        el['id_dir_val'] = fascia['idVentoDirValle']
+                        el['desc_dir_val'] = fascia['descrVentoDirValle']
+
+                        #print(pred['localita'].lower())
+                        #print(prediction_json['previsione'][])
+                        list_predictions.append(pred)
                 #prediction_json['previsione'].remove(pred)
                 #del pred
 
-        return list_localities
+        return list_predictions
 
     def fetch_data(self, url_data: str, list_station_code: List[str]):
         '''
@@ -51,6 +73,8 @@ class Fetch:
         '''url_data = "http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=T0153"
         resp_data = requests.get(url_data)
         print(resp_data.content)'''
+
+    # TODO understand how to parse xml to create records of the deta table
 
 
     # TODO decide time rate at which we want to do fetch
