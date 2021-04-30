@@ -41,7 +41,7 @@ class Previsione:
         return {
             "localita": self.localita,
             "data": self.data,
-            "id_giorno_previsione": self.id_girno_previsione
+            "id_giorno_previsione": self.id_girno_previsione,
             "temp_min": self.temp_min,
             "temp_max": self.temp_max,
             "facia": self.fascia,
@@ -124,7 +124,7 @@ class MySQLStationManager:
         query = "INSERT into previsione (localita, data, id_giorno_previsione, temp_min, temp_max, fascia, " \
                 "id_prec_prob, desc_prec_prob, id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, " \
                 "id_vento_dir_alt, desc_vento_dir_alt, id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val) " \
-                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
         for previsione in previsioni:
             cursor.execute(query, (
