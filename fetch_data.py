@@ -8,10 +8,9 @@ import xml.etree.cElementTree as ET
 from datetime import datetime, timedelta
 
 
-
 def create_times_day():
     spacing = 15    # in minutes
-    lst = [str(i * timedelta(minutes=spacing)) for i in range(24 * 60 // spacing)]
+    lst = [(datetime.strptime(str(i * timedelta(minutes=spacing)), '%H:%M:%S')).time() for i in range(24 * 60 // spacing)]
     print(lst)
     return lst
 
@@ -223,37 +222,54 @@ class Fetch:
         records = {}
         for time in list_time:
             #print((dict_data['data_oggi'], time))
-            if
-            records[(dict_data['data_oggi'], time)] = [dict_data['station_code'], dict_data['localita'], dict_data['data_oggi'], time, dict_data['temp_min'], dict_data['temp_max'], dict_data['rain']]
-            for t in dict_data['data_ora_temp']:
-                data_t = t[0][0]
-                ora_t = t[0][1]
-                temp = t[1]
-                print(data_t)
-                print(ora_t)
-                records[(data_t, ora_t)].append(data_t)
-                records[(data_t, ora_t)].append(ora_t)
-                records[(data_t, ora_t)].append(temp)
+            data = dict_data['data_oggi'] - timedelta(days=1)
+            #print(data)
+            records[(data, time)] = {'station_code': dict_data['station_code'], 'localita': dict_data['localita'], 'data': data, 'time': time, 'temperatura': None, 'pioggia': None, 'vento_velocita': None, 'vento_direzione': None}
+            #records[time] = [dict_data['station_code'], dict_data['localita'], data, time]
 
-            for p in dict_data['data_ora_prec']:
-                data_p = p[0][0]
-                ora_p = p[0][1]
-                prec = p[1]
-                records[(data_p, ora_p)].append(data_p)
-                records[(data_p, ora_p)].append(ora_p)
-                records[(data_p, ora_p)].append(prec)
+        for t in dict_data['data_ora_temp']:
+            data_t = t[0][0]
+            ora_t = t[0][1]
+            #print("QQQQ", ora_t)
+            temp = t[1]
+            #print(ora_t)
+            if (data_t, ora_t) in records:
+            #if(ora_t) in records:
+                #print("CIAOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+                #records[(data_t, ora_t)].append(data_t)
+                #records[(data_t, ora_t)].append(ora_t)
+                records[(data_t, ora_t)]['temperatura'] = temp
 
-            for v in dict_data['data_ora_v_d']:
-                data_v = v[0][0]
-                ora_v = v[0][1]
-                vel_v = v[1]
-                dir_v = v[2]
-                records[(data_v, ora_v)].append(data_v)
-                records[(data_v, ora_v)].append(ora_v)
-                records[(data_v, ora_v)].append(vel_v)
-                records[(data_v, ora_v)].append(dir_v)
+        for p in dict_data['data_ora_prec']:
+            data_p = p[0][0]
+            ora_p = p[0][1]
+            prec = p[1]
+            if (data_p, ora_p) in records:
+                #records[(data_p, ora_p)].append(data_p)
+                #records[(data_p, ora_p)].append(ora_p)
+                records[(data_p, ora_p)]['pioggia'] = prec
 
-        return(records)
+        for v in dict_data['data_ora_v_d']:
+            data_v = v[0][0]
+            ora_v = v[0][1]
+            vel_v = v[1]
+            dir_v = v[2]
+            if (data_v, ora_v) in records:
+                #records[(data_v, ora_v)].append(data_v)
+                #records[(data_v, ora_v)].append(ora_v)
+                records[(data_v, ora_v)]['vento_velocita'] = vel_v
+                records[(data_v, ora_v)]['vento_direzione'] = dir_v
+
+        records_list = []
+        for key in records:
+            record_single = [records[key][key1] for key1 in records[key]]
+            records_list.append(record_single)
+            print("ciao", records_list)
+
+        return(records_list)
+
+    def flatten_list(self, nested_list):
+        return  [val for sublist in nested_list for val in sublist]
 
     def from_fetch_to_repr_tot_stations(self, output_fetch_data, list_time):
         return [self.from_fetch_to_repr_station(out, list_time) for out in output_fetch_data]
@@ -309,7 +325,20 @@ file = open("/home/veror/PycharmProjects/BDT project/pickle/prova.pickle",'rb')
 y = pickle.load(file)
 #print(y)
 y2 = fetch.from_fetch_to_repr_tot_stations(y, list_time)
-print(y2)
+#print(y2)
+
+'''
+file2 = open("/home/veror/PycharmProjects/BDT project/pickle/prova2.pickle",'rb')
+res = pickle.load(file2)
+
+
+for x in res:
+    print(x)'''
+
+
+file_name = open('pickle/prova3.pickle', 'wb') # no duplicates of names od stations (since we consider different zones of same station)
+pickle.dump(y2, file_name)
+
 
 
 #file = open("/home/veror/PycharmProjects/BDT project/pickle/file_code.pickle",'rb')
