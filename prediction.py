@@ -30,7 +30,7 @@ class Previsione:
     def __init__(self, localita: str, data: datetime, id_giorno_previsione: int, temp_min: float, temp_max: float, fascia: str, precipitazioni: Precipitazioni, vento: Vento):
         self.localita = localita
         self.data = data
-        self.id_girno_previsione = id_giorno_previsione
+        self.id_giorno_previsione = id_giorno_previsione
         self.temp_min = temp_min
         self.temp_max = temp_max
         self.fascia = fascia
@@ -41,7 +41,7 @@ class Previsione:
         return {
             "localita": self.localita,
             "data": self.data,
-            "id_giorno_previsione": self.id_girno_previsione,
+            "id_giorno_previsione": self.id_giorno_previsione,
             "temp_min": self.temp_min,
             "temp_max": self.temp_max,
             "facia": self.fascia,
