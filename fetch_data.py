@@ -316,19 +316,20 @@ print(list_station_code_names)
 print(len(list_station_code_names))'''
 
 #print(list_station_code_names)
-
-#y = fetch.fetch_data(' http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=', list_station_codes_names)
-#print(y)
-'''file_name = open('pickle/prova.pickle', 'wb') # no duplicates of names od stations (since we consider different zones of same station)
+'''
+y = fetch.fetch_data(' http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=', list_station_codes_names)
+print(y)
+file_name = open('pickle/prova.pickle', 'wb') # no duplicates of names od stations (since we consider different zones of same station)
 pickle.dump(y, file_name)'''
 file = open("/home/veror/PycharmProjects/BDT project/pickle/prova.pickle",'rb')
 y = pickle.load(file)
 #print(y)
 y2 = fetch.from_fetch_to_repr_tot_stations(y, list_time)
 #print(y2)
+for i in y2:
+    print(i)
 
-'''
-file2 = open("/home/veror/PycharmProjects/BDT project/pickle/prova2.pickle",'rb')
+'''file2 = open("/home/veror/PycharmProjects/BDT project/pickle/prova2.pickle",'rb')
 res = pickle.load(file2)
 
 
