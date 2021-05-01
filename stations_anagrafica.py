@@ -43,11 +43,13 @@ class StationAnagrafica:
         # get all the codes
         for code in root.findall('.//{http://www.meteotrentino.it/}codice'):
             codes.append(code.text)
+        codes.remove('T0396')
         # get all the names
         for name in root.findall('.//{http://www.meteotrentino.it/}nome'):
             # remove part of the name in parenthesis
             modified_name = re.sub(r" \([^()]*\)", "", name.text)
             names.append(modified_name.lower())
+        names.remove('sarca di val genova al ghiacciaio del mandrone')
         zip_codes_names = (list(zip(codes, names)))
         # remove duplicates
         set_modified_name = set(names)
