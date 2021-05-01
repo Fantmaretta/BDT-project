@@ -48,6 +48,7 @@ class StationAnagrafica:
             # remove part of the name in parenthesis
             modified_name = re.sub(r" \([^()]*\)", "", name.text)
             names.append(modified_name.lower())
+        zip_codes_names = (list(zip(codes, names)))
         # remove duplicates
         set_modified_name = set(names)
         names = list(set_modified_name)
@@ -57,12 +58,14 @@ class StationAnagrafica:
 
 
         # save lists into pickles
-        file_code = open('pickle/file_code.pickle', 'wb')
+        file_code = open('pickle/file_code1.pickle', 'wb')
         pickle.dump(codes, file_code)
-        file_name = open('pickle/file_name.pickle', 'wb')
+        file_name = open('pickle/file_name1.pickle', 'wb') # no duplicates of names od stations (since we consider different zones of same station)
         pickle.dump(names, file_name)
-        file_short_name = open('pickle/file_short_name.pickle', 'wb')
+        file_short_name = open('pickle/file_short_name1.pickle', 'wb')
         pickle.dump(short_names, file_short_name)
+        file_zip_code_name = open('pickle/file_zip_code_name1.pickle', 'wb')
+        pickle.dump(zip_codes_names, file_zip_code_name)
 
         '''print(codes)
         print(names)
