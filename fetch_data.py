@@ -3,6 +3,9 @@ from typing import List
 import pickle
 import schedule
 import time
+import xml
+import xml.etree.cElementTree as ET
+from datetime import datetime
 
 class Fetch:
 
@@ -35,6 +38,7 @@ class Fetch:
                         el['id_previsione_giorno'] = giorno
                         el['temp_min'] = pred['tMinGiorno'] # on all day
                         el['temp_max'] = pred['tMaxGiorno'] # on all day
+                        el['fascia'] = pred['fasciaOra']
                         # info below here are referred to the single fascia
                         el['id_prec_prob'] = fascia['idPrecProb']
                         el['desc_prec_prob'] = fascia['descPrecProb']
@@ -57,6 +61,111 @@ class Fetch:
 
         return list_predictions
 
+    '''def fetch_data(self, url_data: str, list_station_code: List[str]):
+        
+        Given an url and one list containing stations' codes, it returns the actual meteorological data from that url
+        only for the stations with those codes (localities that are meteorological stations)
+        :param url_data:
+        :param list_station_code:
+        :return:
+        
+        list_resp_data = [requests.get(url_data + station_id) for station_id in list_station_code]
+
+        for i in list_resp_data:
+                            print(i.content)
+                        url_data = "http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=T0153"
+                        resp_data = requests.get(url_data)
+                        print(resp_data.content)
+
+        return list_resp_data'''
+
+
+
+    def fetch_single_station(self, url_data: str, station_code: str):
+
+        resp_data = requests.get(url_data + station_code)
+
+        root = ET.fromstring(resp_data.content)
+
+        '''for child in root.iter('*'):
+            print(child.tag)'''
+
+        if root.find('.//{http://www.meteotrentino.it/}data').text is not  None:
+            data_oggi = root.find('.//{http://www.meteotrentino.it/}data').text
+        else:
+            data_oggi = None
+        if root.find('.//{http://www.meteotrentino.it/}tmin').text is not None:
+            temp_min = float(root.find('.//{http://www.meteotrentino.it/}tmin').text)
+        else:
+            temp_min = None
+        if root.find('.//{http://www.meteotrentino.it/}tmax').text is not None:
+            temp_max = float(root.find('.//{http://www.meteotrentino.it/}tmax').text)
+        else:
+            temp_max = None
+        if root.find('.//{http://www.meteotrentino.it/}rain').text is not None:
+            rain = float(root.find('.//{http://www.meteotrentino.it/}rain').text)
+        else:
+            rain = None
+
+        # TODO NON SI CAPISCE COME USARE TMAX E TMIN, NON CORRISPONDONO ALLE OSSERVAZIONI RIPORTATE SOTTO, MAGARI
+        # TODO POSSIAMO NON USARLE E RICAVARCELE DAI DATI
+
+        date_ore_t = []
+        temperature = []
+        for temperatura_aria in root.findall('.//{http://www.meteotrentino.it/}temperatura_aria'):
+            for data_ora in temperatura_aria.findall('.//{http://www.meteotrentino.it/}data'):
+                if data_ora is not None:
+                    data, ora = (datetime.fromisoformat(data_ora.text)).date(), (datetime.fromisoformat(data_ora.text)).time()
+                date_ore_t.append((data, ora))
+            for temperatura in temperatura_aria.findall('.//{http://www.meteotrentino.it/}temperatura'):
+                temperature.append(temperatura.text)
+        data_ora_temp = list(zip(date_ore_t, temperature))
+        print('1', data_ora_temp)
+        print(len(data_ora_temp))
+
+        date_ore_p = []
+        piogge = []
+        for precipitazione in root.findall('.//{http://www.meteotrentino.it/}precipitazione'):
+            for data_ora in precipitazione.findall('.//{http://www.meteotrentino.it/}data'):
+                date_ore_p.append(data_ora.text)
+            for pioggia in precipitazione.findall('.//{http://www.meteotrentino.it/}pioggia'):
+                piogge.append(pioggia.text)
+        data_ora_prec = list(zip(date_ore_p, piogge))
+        print('2', data_ora_prec)
+        print(len(data_ora_prec))
+
+        date_ore_v = []
+        venti_vel = []
+        venti_dir = []
+        for vento in root.findall('.//{http://www.meteotrentino.it/}vento_al_suolo'):
+            for data_ora in vento.findall('.//{http://www.meteotrentino.it/}data'):
+                date_ore_v.append(data_ora.text)
+            for velocita in vento.findall('.//{http://www.meteotrentino.it/}v'):
+                venti_vel.append(velocita.text)
+            for direzione in vento.findall('.//{http://www.meteotrentino.it/}d'):
+                venti_dir.append(direzione.text)
+        data_ora_v_d = list(zip(date_ore_v, venti_vel, venti_dir))
+        print('3', data_ora_v_d)
+        print(len(data_ora_v_d))
+
+        print('4', list(zip(data_ora_temp, data_ora_v_d, data_ora_prec)))
+        print(len(list(zip(data_ora_temp, data_ora_v_d, data_ora_prec))))
+
+        print({'data_oggi': data_oggi, 'temp_min': temp_min, 'temp_max': temp_max, 'rain': rain, 'data_ora_temp': data_ora_temp, 'data_ora_prec': data_ora_prec, 'data_ora_v_d': data_ora_v_d}
+)
+
+        print(station_code)
+
+        print("-----------------------------------------------------------------\n")
+
+        # NB PU0' ESSERE CHE NON FACCIA ESATTAMENTE OGNI QUARTO D'ORA !!!!!!!!!!!!!!!
+        # IN PARTICOLARE NEI VENTI, GLI ALTRI DUE INVECE SEMBRANO ESSERE SEMPRE CORRETTI
+        # MA OK TANTO NOI FACCIAMO UNA MEDIA
+        # in alcuni posti possono non esserci delle osservazioni -> eg: borgo valsugana non ha i venti
+
+        return {'data_oggi': data_oggi, 'temp_min': temp_min, 'temp_max': temp_max, 'rain': rain, 'data_ora_temp': data_ora_temp, 'data_ora_prec': data_ora_prec, 'data_ora_v_d': data_ora_v_d}
+
+
     def fetch_data(self, url_data: str, list_station_code: List[str]):
         '''
         Given an url and one list containing stations' codes, it returns the actual meteorological data from that url
@@ -65,16 +174,18 @@ class Fetch:
         :param list_station_code:
         :return:
         '''
-        list_resp_data = [requests.get(url_data + station_id) for station_id in list_station_code]
+        list_resp_data = [self.fetch_single_station(url_data, station_code) for station_code in list_station_code]
+        #list_resp_data = [requests.get(url_data + station_code) for station_code in list_station_code]
+
+        print(list_station_code)
+
         return list_resp_data
 
-        '''for i in list_resp_data:
-            print(i.content)'''
-        '''url_data = "http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=T0153"
-        resp_data = requests.get(url_data)
-        print(resp_data.content)'''
 
-    # TODO understand how to parse xml to create records of the deta table
+
+
+
+    # TODO understand how to parse xml to create records of the deta table -> probably we can create dictionary also here
 
 
     # TODO decide time rate at which we want to do fetch
@@ -103,24 +214,32 @@ class Fetch:
 # da mettere nel main
 fetch = Fetch()
 
+
+'''x = fetch.fetch_single_station('http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=', 'T0437')
+print(x)'''
+
+file = open("/home/veror/PycharmProjects/BDT project/pickle/file_code.pickle",'rb')
+list_station_code = pickle.load(file)
+y = fetch.fetch_data(' http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=', list_station_code)
+
 #file = open("/home/veror/PycharmProjects/BDT project/pickle/file_code.pickle",'rb')
 #list_station_code = pickle.load(file)
 #pred_e_data = fetch.fetch_all("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita", "http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=", list_station_code)
 
 #x = fetch.fetch_data("http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=", list_station_code)
 
-file = open("/home/veror/PycharmProjects/BDT project/pickle/file_name.pickle",'rb')
-list_station_name = pickle.load(file)
-y = fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
-y_new = fetch.remove_not_station(y, list_station_name)
+#file = open("/home/veror/PycharmProjects/BDT project/pickle/file_name.pickle",'rb')
+#list_station_name = pickle.load(file)
+#y = fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
+#y_new = fetch.remove_not_station(y, list_station_name)
 
 '''for i in y_new:
     print(i , '\n')'''
 
-print(len(y_new))
+'''print(len(y_new))
 print(y_new)
 print(list_station_name)
-print(len(list_station_name))
+print(len(list_station_name))'''
 
 
 
