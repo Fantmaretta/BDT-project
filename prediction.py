@@ -135,9 +135,9 @@ class MysqlPrevisioniManager:
 
     def list(self) -> List[Previsione]:
         cursor = self.connection.cursor()
-        query = "SELECT localita, data, id_previsione_giorno, temp_min, temp_max, fascia, " \
-                "id_prec_prob, desc_prec_prob, id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, " \
-                "id_vento_dir_alt, desc_vento_dir_alt, id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val from previsione"
+        query = "SELECT localita, data, id_previsione_giorno, temp_min, temp_max, fascia, id_prec_prob, desc_prec_prob, " \
+                "id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, id_vento_dir_alt, desc_vento_dir_alt," \
+                "id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val from previsione"
         cursor.execute(query)
 
         previsioni = []
@@ -170,5 +170,4 @@ class MysqlPrevisioniManager:
 
         return previsioni
 
-prediction_manager = MysqlPrevisioniManager()
 
