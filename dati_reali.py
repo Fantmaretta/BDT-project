@@ -63,8 +63,10 @@ class MySQLDatiRealiManager:
         query = "INSERT into dati_reali (station_code, localita, data, time, temperatura, pioggia, vento_velocita, vento_direzione)" \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 
+        i = 0
         for dato_list in dati_reali:
-            print("re")
+            i += 1
+            print(i)
             for dato in dato_list:
                 cursor.execute(query, (
                     dato.station_code,
