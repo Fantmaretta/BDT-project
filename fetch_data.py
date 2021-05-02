@@ -6,6 +6,8 @@ import time
 import xml
 import xml.etree.cElementTree as ET
 from datetime import datetime, timedelta
+from prediction import Previsione
+from dati_reali import DatoReale
 
 
 def create_times_day():
@@ -22,6 +24,10 @@ file1 = open("/home/veror/PycharmProjects/BDT project/pickle/file_name1.pickle",
 list_station_name = pickle.load(file1)'''
 file2 = open("/home/veror/PycharmProjects/BDT project/pickle/file_zip_code_name1.pickle",'rb')
 list_station_codes_names = pickle.load(file2)
+
+
+
+
 
 class Fetch:
 
@@ -45,16 +51,18 @@ class Fetch:
         '''
         list_predictions = []
         for pred in prediction_json['previsione']: # prediction_json['previsione'] -> type = list
+
             if pred['localita'].lower() in list_stations:
                 for giorno in pred['giorni']:
                     for fascia in giorno['fasce']:
                         el = {}
                         el['localita'] = pred['localita'].lower()
+                        #print(el['localita'])
                         el['data'] = giorno['giorno']
-                        el['id_previsione_giorno'] = giorno
-                        el['temp_min'] = pred['tMinGiorno'] # on all day
-                        el['temp_max'] = pred['tMaxGiorno'] # on all day
-                        el['fascia'] = pred['fasciaOra']
+                        el['id_previsione_giorno'] = giorno['idPrevisioneGiorno']
+                        el['temp_min'] = giorno['tMinGiorno'] # on all day
+                        el['temp_max'] = giorno['tMaxGiorno'] # on all day
+                        el['fascia'] = fascia['fasciaOre']
                         # info below here are referred to the single fascia
                         el['id_prec_prob'] = fascia['idPrecProb']
                         el['desc_prec_prob'] = fascia['descPrecProb']
@@ -63,19 +71,23 @@ class Fetch:
                         el['id_alt'] = fascia['idVentoIntQuota']
                         el['desc_alt'] = fascia['descVentoIntQuota']
                         el['id_dir_alt'] = fascia['idVentoDirQuota']
-                        el['desc_dir_alt'] = fascia['descrVentoDirQuota']
+                        el['desc_dir_alt'] = fascia['descVentoDirQuota']
                         el['id_val'] = fascia['idVentoIntValle']
                         el['desc_val'] = fascia['descVentoIntValle']
                         el['id_dir_val'] = fascia['idVentoDirValle']
-                        el['desc_dir_val'] = fascia['descrVentoDirValle']
+                        el['desc_dir_val'] = fascia['descVentoDirValle']
 
                         #print(pred['localita'].lower())
                         #print(prediction_json['previsione'][])
-                        list_predictions.append(pred)
+                        #print(el)
+                        list_predictions.append(el)
+                        #print(list_predictions)
                 #prediction_json['previsione'].remove(pred)
                 #del pred
+        #print(list_predictions)
+        final_predictions_list = [Previsione.from_repr(raw_pred) for raw_pred in list_predictions]
 
-        return list_predictions
+        return final_predictions_list #list_predictions
 
     '''def fetch_data(self, url_data: str, list_station_code: List[str]):
         
@@ -97,6 +109,33 @@ class Fetch:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # dati reali
     def fetch_single_station(self, url_data: str, station_code_name: (str, str)):
 
         resp_data = requests.get(url_data + station_code_name[0])
@@ -202,7 +241,7 @@ class Fetch:
 
         return {'station_code': station_code_name[0], 'localita': station_code_name[1], 'data_oggi': data_oggi, 'temp_min': temp_min, 'temp_max': temp_max, 'rain': rain, 'data_ora_temp': data_ora_temp, 'data_ora_prec': data_ora_prec, 'data_ora_v_d': data_ora_v_d}
 
-
+    # dati reali
     def fetch_data(self, url_data: str, list_station_code_name: List[tuple]):
         '''
         Given an url and one list containing stations' codes, it returns the actual meteorological data from that url
@@ -216,6 +255,7 @@ class Fetch:
 
         return list_resp_data
 
+    # dati reali
     def from_fetch_to_repr_station(self, dict_data, list_time):
         #list_observations_single_locality = []
         #print(dict_data)
@@ -262,15 +302,17 @@ class Fetch:
 
         records_list = []
         for key in records:
-            record_single = [records[key][key1] for key1 in records[key]]
+            record_single = DatoReale.from_repr(records[key])
+            #record_single = [records[key][key1] for key1 in records[key]]
+            #record_single_dato_reale = DatoReale.from_repr(record_single)
             records_list.append(record_single)
-            print("ciao", records_list)
 
         return(records_list)
 
-    def flatten_list(self, nested_list):
-        return  [val for sublist in nested_list for val in sublist]
+    #def flatten_list(self, nested_list):
+    #    return [val for sublist in nested_list for val in sublist]
 
+    #dati reali
     def from_fetch_to_repr_tot_stations(self, output_fetch_data, list_time):
         return [self.from_fetch_to_repr_station(out, list_time) for out in output_fetch_data]
 
@@ -301,8 +343,85 @@ class Fetch:
 
 # TODO connect DB -> relational? mysql
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # da mettere nel main
 fetch = Fetch()
+
+#TODO CODICE PER RUNNARE FETCH DATI REALI
+file = open("/home/veror/PycharmProjects/BDT project/pickle/prova.pickle",'rb')
+y = pickle.load(file)
+#print(y)
+y2 = fetch.from_fetch_to_repr_tot_stations(y, list_time)
+#print(y2)
+for i in y2:
+    for j in i:
+        print(DatoReale.to_repr(j))
+print(y2)
+
+'''file_name = open('pickle/prova3.pickle', 'wb') # no duplicates of names od stations (since we consider different zones of same station)
+pickle.dump(y2, file_name)'''
+
+'''file2 = open("/home/veror/PycharmProjects/BDT project/pickle/prova2.pickle",'rb')
+res = pickle.load(file2)
+
+for x in res:
+    print(x)'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 '''x = fetch.fetch_single_station('http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=', 'T0437')
@@ -321,24 +440,10 @@ y = fetch.fetch_data(' http://dati.meteotrentino.it/service.asmx/ultimiDatiStazi
 print(y)
 file_name = open('pickle/prova.pickle', 'wb') # no duplicates of names od stations (since we consider different zones of same station)
 pickle.dump(y, file_name)'''
-file = open("/home/veror/PycharmProjects/BDT project/pickle/prova.pickle",'rb')
-y = pickle.load(file)
-#print(y)
-y2 = fetch.from_fetch_to_repr_tot_stations(y, list_time)
-#print(y2)
-for i in y2:
-    print(i)
-
-'''file2 = open("/home/veror/PycharmProjects/BDT project/pickle/prova2.pickle",'rb')
-res = pickle.load(file2)
 
 
-for x in res:
-    print(x)'''
 
 
-file_name = open('pickle/prova3.pickle', 'wb') # no duplicates of names od stations (since we consider different zones of same station)
-pickle.dump(y2, file_name)
 
 
 
@@ -394,3 +499,22 @@ print(list_data)'''
 #print(stations)
 
 #print(prediction["previsione"][0])
+
+
+
+x = fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
+#list_station_name.remove('daone')
+'''for el in x:
+    print(el)'''
+#print(x)
+
+
+file = open("/home/veror/PycharmProjects/BDT project/pickle/file_name1.pickle",'rb')
+list_station_name = pickle.load(file)
+#print(list_station_name)
+y = fetch.remove_not_station(x, list_station_name)
+for i in y:
+    print(Previsione.to_repr(i))
+
+
+#print(y)
