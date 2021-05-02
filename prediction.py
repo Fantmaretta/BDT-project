@@ -104,7 +104,7 @@ class MysqlPrevisioniManager:
 
     def save(self, previsioni: List[Previsione]) -> None:
         cursor = self.connection.cursor()
-        query = "INSERT into previsione (localita, data, id_previsione_giorno, temp_min, temp_max, fascia, " \
+        query = "INSERT into previsioni (localita, data, id_previsione_giorno, temp_min, temp_max, fascia, " \
                 "id_prec_prob, desc_prec_prob, id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, " \
                 "id_vento_dir_alt, desc_vento_dir_alt, id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val) " \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -137,7 +137,7 @@ class MysqlPrevisioniManager:
         cursor = self.connection.cursor()
         query = "SELECT localita, data, id_previsione_giorno, temp_min, temp_max, fascia, id_prec_prob, desc_prec_prob, " \
                 "id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, id_vento_dir_alt, desc_vento_dir_alt," \
-                "id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val from previsione"
+                "id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val from previsioni"
         cursor.execute(query)
 
         previsioni = []
