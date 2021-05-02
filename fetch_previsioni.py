@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     fetch_previsioni = FetchPrevisioni()
 
-    #previsioni_manager = MysqlPrevisioniManager()
+    previsioni_manager = MysqlPrevisioniManager()
 
     pred = fetch_previsioni.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
 
@@ -81,4 +81,4 @@ if __name__ == "__main__":
 
     print(prev_no_stations)
 
-    #previsioni_manager.save(prev_no_stations)
+    previsioni_manager.save(prev_no_stations)
