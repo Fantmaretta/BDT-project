@@ -7,7 +7,7 @@ import xml
 import xml.etree.cElementTree as ET
 from datetime import datetime, timedelta
 from prediction import Previsione
-from dati_reali import DatoReale
+from dati_reali import DatiReali
 
 
 def create_times_day():
@@ -58,7 +58,7 @@ class Fetch:
                         el = {}
                         el['localita'] = pred['localita'].lower()
                         #print(el['localita'])
-                        el['data'] = giorno['giorno']
+                        el['data'] = datetime.strptime(giorno['giorno'], '%Y-%m-%d').date()
                         el['id_previsione_giorno'] = giorno['idPrevisioneGiorno']
                         el['temp_min'] = giorno['tMinGiorno'] # on all day
                         el['temp_max'] = giorno['tMaxGiorno'] # on all day
@@ -209,6 +209,8 @@ class Fetch:
             for data_ora in vento.findall('.//{http://www.meteotrentino.it/}data'):
                 if data_ora is not None:
                     data, ora = (datetime.fromisoformat(data_ora.text)).date(), (datetime.fromisoformat(data_ora.text)).time()
+                    print(type(data))
+                    print(type(ora))
                     date_ore_v.append((data, ora))
                 else:
                     date_ore_v.append((None, None))
@@ -302,9 +304,9 @@ class Fetch:
 
         records_list = []
         for key in records:
-            record_single = DatoReale.from_repr(records[key])
+            record_single = DatiReali.from_repr(records[key])
             #record_single = [records[key][key1] for key1 in records[key]]
-            #record_single_dato_reale = DatoReale.from_repr(record_single)
+            #record_single_dato_reale = DatiReali.from_repr(record_single)
             records_list.append(record_single)
 
         return(records_list)
@@ -376,15 +378,32 @@ class Fetch:
 fetch = Fetch()
 
 #TODO CODICE PER RUNNARE FETCH DATI REALI
-file = open("/home/veror/PycharmProjects/BDT project/pickle/prova.pickle",'rb')
-y = pickle.load(file)
+'''file = open("/home/veror/PycharmProjects/BDT project/pickle/prova.pickle",'rb')
+y = pickle.load(file)'''
 #print(y)
+y = fetch.fetch_data(' http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=', list_station_codes_names)
+#print(y)
+'''file_name = open('pickle/prova.pickle', 'wb') # no duplicates of names od stations (since we consider different zones of same station)
+pickle.dump(y, file_name)'''
 y2 = fetch.from_fetch_to_repr_tot_stations(y, list_time)
 #print(y2)
+'''
 for i in y2:
     for j in i:
-        print(DatoReale.to_repr(j))
-print(y2)
+        print(DatiReali.to_repr(j))
+print(y2)'''
+
+
+
+
+
+
+
+
+
+
+
+
 
 '''file_name = open('pickle/prova3.pickle', 'wb') # no duplicates of names od stations (since we consider different zones of same station)
 pickle.dump(y2, file_name)'''
@@ -435,11 +454,6 @@ print(list_station_code_names)
 print(len(list_station_code_names))'''
 
 #print(list_station_code_names)
-'''
-y = fetch.fetch_data(' http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=', list_station_codes_names)
-print(y)
-file_name = open('pickle/prova.pickle', 'wb') # no duplicates of names od stations (since we consider different zones of same station)
-pickle.dump(y, file_name)'''
 
 
 
@@ -501,20 +515,23 @@ print(list_data)'''
 #print(prediction["previsione"][0])
 
 
-
-x = fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
-#list_station_name.remove('daone')
+# TODO CODICE PER FETCH PREVISIONI
+'''x = fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
+'''#list_station_name.remove('daone')
 '''for el in x:
     print(el)'''
 #print(x)
 
 
-file = open("/home/veror/PycharmProjects/BDT project/pickle/file_name1.pickle",'rb')
+'''file = open("/home/veror/PycharmProjects/BDT project/pickle/file_name1.pickle",'rb')
 list_station_name = pickle.load(file)
 #print(list_station_name)
-y = fetch.remove_not_station(x, list_station_name)
-for i in y:
-    print(Previsione.to_repr(i))
+y = fetch.remove_not_station(x, list_station_name)'''
+'''for i in y:
+    print(Previsione.to_repr(i))'''
+
+
+
 
 
 #print(y)
