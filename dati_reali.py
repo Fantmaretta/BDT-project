@@ -65,8 +65,8 @@ class MySQLDatiRealiManager:
 
         i = 0
         for dato_list in dati_reali:
-            i += 1
-            print(i)
+            #i += 1
+            #print(i)
             for dato in dato_list:
                 cursor.execute(query, (
                     dato.station_code,
