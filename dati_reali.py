@@ -1,6 +1,6 @@
 import datetime
 import mysql.connector
-from typing import Optional, List
+from typing import List
 
 
 class Vento:
