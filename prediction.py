@@ -1,7 +1,5 @@
 from datetime import datetime
-import json
-import os
-from typing import Optional, List
+from typing import List
 import mysql.connector
 
 class Precipitazioni:
