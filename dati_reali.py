@@ -60,7 +60,7 @@ class MySQLDatiRealiManager:
 
     def save(self, dati_reali: List[List[DatiReali]]) -> None:
         cursor = self.connection.cursor()
-        query = "INSERT into previsione (station_code, localita, data, time, temperatura, pioggia, vento_velocita, vento_direzione)" \
+        query = "INSERT into dat_reali (station_code, localita, data, time, temperatura, pioggia, vento_velocita, vento_direzione)" \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 
         for dato_list in dati_reali:
@@ -80,7 +80,7 @@ class MySQLDatiRealiManager:
 
     def list(self) -> List[DatiReali]:
         cursor = self.connection.cursor()
-        query = "SELECT station_code, localita, data, time, temperatura, pioggia, velocita_vento, direzione_vento"
+        query = "SELECT station_code, localita, data, time, temperatura, pioggia, velocita_vento, direzione_vento from dati_reali"
         cursor.execute(query)
 
         dati_reali = []
