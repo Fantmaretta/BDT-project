@@ -60,10 +60,11 @@ class MySQLDatiRealiManager:
 
     def save(self, dati_reali: List[List[DatiReali]]) -> None:
         cursor = self.connection.cursor()
-        query = "INSERT into dat_reali (station_code, localita, data, time, temperatura, pioggia, vento_velocita, vento_direzione)" \
+        query = "INSERT into dati_reali (station_code, localita, data, time, temperatura, pioggia, vento_velocita, vento_direzione)" \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 
         for dato_list in dati_reali:
+            print("re")
             for dato in dato_list:
                 cursor.execute(query, (
                     dato.station_code,
