@@ -6,6 +6,7 @@ import time
 import xml.etree.cElementTree as ET
 from datetime import datetime, timedelta
 from dati_reali import DatiReali, MySQLDatiRealiManager
+import time
 
 
 def create_times_day():
@@ -62,8 +63,8 @@ class FetchDati:
                 else:
                     temperature.append(None)
         data_ora_temp = list(zip(date_ore_t, temperature))
-        print('1', data_ora_temp)
-        print(len(data_ora_temp))
+        #print('1', data_ora_temp)
+        #print(len(data_ora_temp))
 
         date_ore_p = []
         piogge = []
@@ -81,8 +82,8 @@ class FetchDati:
                 else:
                     piogge.append(None)
         data_ora_prec = list(zip(date_ore_p, piogge))
-        print('2', data_ora_prec)
-        print(len(data_ora_prec))
+        #print('1', data_ora_prec)
+        #print(len(data_ora_prec))
 
         date_ore_v = []
         venti_vel = []
@@ -105,16 +106,16 @@ class FetchDati:
                 else:
                     venti_dir.append(None)
         data_ora_v_d = list(zip(date_ore_v, venti_vel, venti_dir))
-        print('3', data_ora_v_d)
-        print(len(data_ora_v_d))
+        #print('3', data_ora_v_d)
+        #print(len(data_ora_v_d))
 
-        print('4', list(zip(data_ora_temp, data_ora_v_d, data_ora_prec)))
-        print(len(list(zip(data_ora_temp, data_ora_v_d, data_ora_prec))))
+        #print('4', list(zip(data_ora_temp, data_ora_v_d, data_ora_prec)))
+        #print(len(list(zip(data_ora_temp, data_ora_v_d, data_ora_prec))))
 
-        print({'localita': station_code_name[1], 'data_oggi': data_oggi, 'temp_min': temp_min, 'temp_max': temp_max, 'rain': rain, 'data_ora_temp': data_ora_temp, 'data_ora_prec': data_ora_prec, 'data_ora_v_d': data_ora_v_d})
+        #print({'localita': station_code_name[1], 'data_oggi': data_oggi, 'temp_min': temp_min, 'temp_max': temp_max, 'rain': rain, 'data_ora_temp': data_ora_temp, 'data_ora_prec': data_ora_prec, 'data_ora_v_d': data_ora_v_d})
 
 
-        print("-----------------------------------------------------------------\n")
+        #print("-----------------------------------------------------------------\n")
 
         # NB PU0' ESSERE CHE NON FACCIA ESATTAMENTE OGNI QUARTO D'ORA !!!!!!!!!!!!!!!
         # IN PARTICOLARE NEI VENTI, GLI ALTRI DUE INVECE SEMBRANO ESSERE SEMPRE CORRETTI
@@ -132,7 +133,23 @@ class FetchDati:
         :param list_station_code:
         :return:
         '''
-        list_resp_data = [self.fetch_single_station(url_data, station_code_name) for station_code_name in list_station_code_name]
+
+        list_resp_data = []
+        ''' for station_code_name in list_station_code_name:
+            try:
+                list_resp_data.append(self.fetch_single_station(url_data, station_code_name))
+                break
+            except:
+                print("Connection refused by the server..")
+                print("Let me sleep for 5 seconds")
+                print("ZZzzzz...")
+                time.sleep(5)
+                print("Was a nice sleep, now let me continue...")
+                continue'''
+        for station_code_name in list_station_code_name:
+            list_resp_data.append(self.fetch_single_station(url_data, station_code_name))
+            time.sleep(2)
+        #list_resp_data = [self.fetch_single_station(url_data, station_code_name) for station_code_name in list_station_code_name]
 
         return list_resp_data
 
@@ -183,7 +200,7 @@ if __name__ == "__main__":
 
     fetch_dati = FetchDati()
 
-    #dati_manager = MySQLDatiRealiManager()
+    dati_manager = MySQLDatiRealiManager()
 
     file2 = open("/home/veror/PycharmProjects/BDT project/pickle/file_zip_code_name1.pickle", 'rb')
     list_station_codes_names = pickle.load(file2)
@@ -195,9 +212,9 @@ if __name__ == "__main__":
 
     tot_dati = fetch_dati.from_fetch_to_repr_tot_stations(dati, list_time)
 
-    print(tot_dati)
+    #print(tot_dati)
 
-    #dati_manager.save(tot_dati)
+    dati_manager.save(tot_dati)
 
 
 
