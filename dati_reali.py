@@ -50,30 +50,31 @@ class MySQLDatiRealiManager:
 
     def __init__(self) -> None:
         self.connection = mysql.connector.connect(
-            host="127.0.0.1",
+            host="bdtmysql.cvpe8im7hapy.us-east-2.rds.amazonaws.com",
             port=3306,
             database="bdt_db_mysql",
-            user="root",
-            password="password"
+            user="root_bdt",
+            password="bdt_mysql"
         )
         self.connection.autocommit = True
 
-    def save(self, dati_reali: List[DatiReali]) -> None:
+    def save(self, dati_reali: List[List[DatiReali]]) -> None:
         cursor = self.connection.cursor()
         query = "INSERT into previsione (station_code, localita, data, time, temperatura, pioggia, vento_velocita, vento_direzione)" \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 
-        for dato in dati_reali:
-            cursor.execute(query, (
-                dato.station_code,
-                dato.localita,
-                dato.data,
-                dato.time,
-                dato.temperatura,
-                dato.pioggia,
-                dato.vento.v,
-                dato.vento.d,
-            ))
+        for dato_list in dati_reali:
+            for dato in dato_list:
+                cursor.execute(query, (
+                    dato.station_code,
+                    dato.localita,
+                    dato.data,
+                    dato.time,
+                    dato.temperatura,
+                    dato.pioggia,
+                    dato.vento.v,
+                    dato.vento.d,
+                ))
 
         cursor.close()
 
@@ -99,4 +100,6 @@ class MySQLDatiRealiManager:
         cursor.close()
 
         return dati_reali
+
+dati_reali_manager = MySQLDatiRealiManager()
 # TODO decide hw to structure from xml to  -> ?
