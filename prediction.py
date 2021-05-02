@@ -106,7 +106,7 @@ class MysqlPrevisioniManager:
         cursor = self.connection.cursor()
         query = "INSERT into previsioni (localita, data, id_previsione_giorno, temp_min, temp_max, fascia, " \
                 "id_prec_prob, desc_prec_prob, id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, " \
-                "id_vento_dir_alt, desc_vento_dir_alt, id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val) " \
+                "id_vento_dir_alt, desc_vento_dir_alt, id_vento_val, desc_vento_val, id_vento_dir_val, desc_vento_dir_val) " \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
         for previsione in previsioni:
@@ -137,11 +137,11 @@ class MysqlPrevisioniManager:
         cursor = self.connection.cursor()
         query = "SELECT localita, data, id_previsione_giorno, temp_min, temp_max, fascia, id_prec_prob, desc_prec_prob, " \
                 "id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, id_vento_dir_alt, desc_vento_dir_alt," \
-                "id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val from previsioni"
+                "id_vento_val, desc_vento_val, id_vento_dir_val, desc_vento_dir_val from previsioni"
         cursor.execute(query)
 
         previsioni = []
-        for localita, data, id_previsione_giorno, temp_min, temp_max, fascia, id_prec_prob, desc_prec_prob, id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, id_vento_dir_alt, desc_vento_dir_alt, id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val in cursor:
+        for localita, data, id_previsione_giorno, temp_min, temp_max, fascia, id_prec_prob, desc_prec_prob, id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, id_vento_dir_alt, desc_vento_dir_alt, id_vento_val, desc_vento_val, id_vento_dir_val, desc_vento_dir_val in cursor:
             previsioni.append(Previsione(
                 localita,
                 data,
@@ -162,8 +162,8 @@ class MysqlPrevisioniManager:
                     desc_vento_dir_alt,
                     id_vento_val,
                     desc_vento_val,
-                    id_dir_vento_val,
-                    desc_dir_vento_val)
+                    id_vento_dir_val,
+                    desc_vento_dir_val)
             ))
 
         cursor.close()
