@@ -1,8 +1,6 @@
 import requests
 from typing import List
 import pickle
-import schedule
-import time
 import xml.etree.cElementTree as ET
 from datetime import datetime, timedelta
 from dati_reali import DatiReali, MySQLDatiRealiManager
