@@ -380,18 +380,18 @@ fetch = Fetch()
 #TODO CODICE PER RUNNARE FETCH DATI REALI
 '''file = open("/home/veror/PycharmProjects/BDT project/pickle/prova.pickle",'rb')
 y = pickle.load(file)'''
-#print(y)
-y = fetch.fetch_data(' http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=', list_station_codes_names)
-#print(y)
+#y = fetch.fetch_data(' http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=', list_station_codes_names)
 '''file_name = open('pickle/prova.pickle', 'wb') # no duplicates of names od stations (since we consider different zones of same station)
 pickle.dump(y, file_name)'''
-y2 = fetch.from_fetch_to_repr_tot_stations(y, list_time)
-#print(y2)
-'''
+'''y2 = fetch.from_fetch_to_repr_tot_stations(y, list_time)
+
+
 for i in y2:
     for j in i:
-        print(DatiReali.to_repr(j))
+        print(j)
+
 print(y2)'''
+#print(y2)
 
 
 
@@ -516,19 +516,22 @@ print(list_data)'''
 
 
 # TODO CODICE PER FETCH PREVISIONI
-'''x = fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
-'''#list_station_name.remove('daone')
+x = fetch.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
+#list_station_name.remove('daone')
 '''for el in x:
     print(el)'''
 #print(x)
 
 
-'''file = open("/home/veror/PycharmProjects/BDT project/pickle/file_name1.pickle",'rb')
+file = open("/home/veror/PycharmProjects/BDT project/pickle/file_name1.pickle",'rb')
 list_station_name = pickle.load(file)
 #print(list_station_name)
-y = fetch.remove_not_station(x, list_station_name)'''
+y = fetch.remove_not_station(x, list_station_name)
 '''for i in y:
     print(Previsione.to_repr(i))'''
+for i in y:
+    print(i)
+print(y)
 
 
 
