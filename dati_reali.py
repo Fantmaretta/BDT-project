@@ -8,8 +8,8 @@ class Vento:
         self.v = v
         self.d = d
 
-class DatoReale:
-    def __init__(self, station_code: str, localita: str, data: datetime, time: datetime, temperatura: float, pioggia: float, vento: Vento):
+class DatiReali:
+    def __init__(self, station_code: str, localita: str, data: datetime.date, time: datetime.time, temperatura: float, pioggia: float, vento: Vento):
         self.station_code = station_code
         self.localita = localita
         self.data = data
@@ -32,7 +32,7 @@ class DatoReale:
 
     @staticmethod
     def from_repr(raw_data: dict):
-        return DatoReale(
+        return DatiReali(
             raw_data["station_code"],
             raw_data["localita"],
             raw_data["data"],
@@ -45,4 +45,58 @@ class DatoReale:
             )
         )
 
+
+class MySQLDatiRealiManager:
+
+    def __init__(self) -> None:
+        self.connection = mysql.connector.connect(
+            host="127.0.0.1",
+            port=3306,
+            database="bdt_db_mysql",
+            user="root",
+            password="password"
+        )
+        self.connection.autocommit = True
+
+    def save(self, dati_reali: List[DatiReali]) -> None:
+        cursor = self.connection.cursor()
+        query = "INSERT into previsione (station_code, localita, data, time, temperatura, pioggia, vento_velocita, vento_direzione)" \
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+
+        for dato in dati_reali:
+            cursor.execute(query, (
+                dato.station_code,
+                dato.localita,
+                dato.data,
+                dato.time,
+                dato.temperatura,
+                dato.pioggia,
+                dato.vento.v,
+                dato.vento.d,
+            ))
+
+        cursor.close()
+
+    def list(self) -> List[DatiReali]:
+        cursor = self.connection.cursor()
+        query = "SELECT station_code, localita, data, time, temperatura, pioggia, velocita_vento, direzione_vento"
+        cursor.execute(query)
+
+        dati_reali = []
+        for station_code, localita, data, time, temperatura, pioggia, velocita_vento, direzione_vento in cursor:
+            dati_reali.append(DatiReali(
+                station_code,
+                localita,
+                data,
+                temperatura,
+                pioggia,
+                Vento(
+                    velocita_vento,
+                    direzione_vento
+                )
+            ))
+
+        cursor.close()
+
+        return dati_reali
 # TODO decide hw to structure from xml to  -> ?
