@@ -79,6 +79,6 @@ if __name__ == "__main__":
     list_station_name = pickle.load(file)
     prev_no_stations = y = fetch_previsioni.remove_not_station(pred, list_station_name)
 
-    print(prev_no_stations)
+    #print(prev_no_stations)
 
     previsioni_manager.save(prev_no_stations)
