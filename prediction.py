@@ -94,11 +94,11 @@ class MysqlPrevisioniManager:
 
     def __init__(self) -> None:
         self.connection = mysql.connector.connect(
-            host="127.0.0.1",
+            host="bdtmysql.cvpe8im7hapy.us-east-2.rds.amazonaws.com",
             port=3306,
-            database="bdt-station-db",
-            user="root",
-            password="password"
+            database="bdt_db_mysql",
+            user="root_bdt",
+            password="bdt_mysql"
         )
         self.connection.autocommit = True
 
@@ -169,3 +169,6 @@ class MysqlPrevisioniManager:
         cursor.close()
 
         return previsioni
+
+prediction_manager = MysqlPrevisioniManager()
+
