@@ -27,7 +27,7 @@ class Vento:
 
 class Previsione:
 
-    def __init__(self, localita: str, data: datetime, id_previsione_giorno: int, temp_min: float, temp_max: float, fascia: str, precipitazioni: Precipitazioni, vento: Vento):
+    def __init__(self, localita: str, data: datetime.date, id_previsione_giorno: int, temp_min: int, temp_max: int, fascia: str, precipitazioni: Precipitazioni, vento: Vento):
         self.localita = localita
         self.data = data
         self.id_previsione_giorno = id_previsione_giorno
@@ -90,7 +90,7 @@ class Previsione:
         return super().__eq__(o)
 
 
-class MySQLStationManager:
+class MysqlPrevisioniManager:
 
     def __init__(self) -> None:
         self.connection = mysql.connector.connect(
