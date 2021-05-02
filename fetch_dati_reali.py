@@ -12,7 +12,7 @@ import time
 def create_times_day():
     spacing = 15    # in minutes
     lst = [(datetime.strptime(str(i * timedelta(minutes=spacing)), '%H:%M:%S')).time() for i in range(24 * 60 // spacing)]
-    print(lst)
+    #print(lst)
     return lst
 
 
@@ -202,8 +202,10 @@ if __name__ == "__main__":
 
     dati_manager = MySQLDatiRealiManager()
 
-    file2 = open("/home/veror/PycharmProjects/BDT project/pickle/file_zip_code_name1.pickle", 'rb')
-    list_station_codes_names = pickle.load(file2)
+    file1 = open("/home/veror/PycharmProjects/BDT project/pickle/both_zip_stations_codes.pickle", 'rb')
+    list_station_codes_names = pickle.load(file1)
+    '''file2 = open("/home/veror/PycharmProjects/BDT project/pickle/file_zip_code_name1.pickle", 'rb')
+    list_station_codes_names = pickle.load(file2)'''
 
     list_time = create_times_day()
 
