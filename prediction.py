@@ -27,10 +27,10 @@ class Vento:
 
 class Previsione:
 
-    def __init__(self, localita: str, data: datetime, id_giorno_previsione: int, temp_min: float, temp_max: float, fascia: str, precipitazioni: Precipitazioni, vento: Vento):
+    def __init__(self, localita: str, data: datetime, id_previsione_giorno: int, temp_min: float, temp_max: float, fascia: str, precipitazioni: Precipitazioni, vento: Vento):
         self.localita = localita
         self.data = data
-        self.id_giorno_previsione = id_giorno_previsione
+        self.id_previsione_giorno = id_previsione_giorno
         self.temp_min = temp_min
         self.temp_max = temp_max
         self.fascia = fascia
@@ -41,12 +41,22 @@ class Previsione:
         return {
             "localita": self.localita,
             "data": self.data,
-            "id_giorno_previsione": self.id_giorno_previsione,
+            "id_previsione_giorno": self.id_previsione_giorno,
             "temp_min": self.temp_min,
             "temp_max": self.temp_max,
             "facia": self.fascia,
-            "precipitazioni": [self.precipitazioni.id_prec_prob, self.precipitazioni.desc_prec_prob, self.precipitazioni.id_prec_int, self.precipitazioni.desc_prec_int],
-            "vento": [self.vento.id_alt, self.vento.desc_alt, self.vento.id_dir_alt, self.vento.desc_dir_alt, self.vento.id_val, self.vento.desc_val, self.vento.id_dir_val, self.vento.desc_dir_val]
+            "id_prec_prob": self.precipitazioni.id_prec_prob,
+            "desc_prec_prob": self.precipitazioni.desc_prec_prob,
+            "id_prec_int": self.precipitazioni.id_prec_int,
+            "desc_prec_int": self.precipitazioni.desc_prec_int,
+            "id_alt": self.vento.id_alt,
+            "desc_alt":self.vento.desc_alt,
+            "id_dir_alt": self.vento.id_dir_alt,
+            "desc_dir_alt": self.vento.desc_dir_alt,
+            "id_val": self.vento.id_val,
+            "desc_val": self.vento.desc_val,
+            "id_dir_val": self.vento.id_dir_val,
+            "desc_dir_val": self.vento.desc_dir_val
         }
 
     @staticmethod
@@ -54,57 +64,30 @@ class Previsione:
         return Previsione(
             raw_pred["localita"],
             raw_pred["data"],
-            raw_pred["id_giorno_previsione"],
+            raw_pred["id_previsione_giorno"],
             raw_pred["temp_min"],
             raw_pred["temp_max"],
             raw_pred["fascia"],
             Precipitazioni(
-                raw_pred["precipitazioni"][0],
-                raw_pred["precipitazioni"][1],
-                raw_pred["precipitazioni"][2],
-                raw_pred["precipitazioni"][3],
+                raw_pred["id_prec_prob"],
+                raw_pred["desc_prec_prob"],
+                raw_pred["id_prec_int"],
+                raw_pred["desc_prec_int"],
             ),
             Vento(
-                raw_pred["vento"][0],
-                raw_pred["vento"][1],
-                raw_pred["vento"][2],
-                raw_pred["vento"][3],
-                raw_pred["vento"][4],
-                raw_pred["vento"][5],
-                raw_pred["vento"][6],
-                raw_pred["vento"][7],
+                raw_pred["id_alt"],
+                raw_pred["desc_alt"],
+                raw_pred["id_dir_alt"],
+                raw_pred["desc_dir_alt"],
+                raw_pred["id_val"],
+                raw_pred["desc_val"],
+                raw_pred["id_dir_val"],
+                raw_pred["desc_dir_val"],
             )
         )
 
     def __eq__(self, o: object) -> bool:
         return super().__eq__(o)
-
-
-
-class PrevisioneManager:
-
-    PREVISIONE_FILE = "previsione.json"
-
-    def __init__(self) -> None:
-        if not os.path.isfile(self.PREVISIONE_FILE):
-            with open("previsione.json", "w") as f:
-                json.dump([], f)
-
-    def save(self, previsione: List[Previsione]) -> None:
-        old_previsione = self.list()
-        update_previsione = old_previsione + previsione
-
-        with open("stations.json", "w") as f:
-            json.dump(
-                [station.to_repr() for station in update_previsione],
-                f,
-                indent=4
-            )
-
-    def list(self) -> List[Previsione]:
-        with open("previsione.json", "r") as f:
-            raw_previsioni = json.load(f)
-            return [Previsione.from_repr(raw_previsione) for raw_previsione in raw_previsioni]
 
 
 class MySQLStationManager:
@@ -121,7 +104,7 @@ class MySQLStationManager:
 
     def save(self, previsioni: List[Previsione]) -> None:
         cursor = self.connection.cursor()
-        query = "INSERT into previsione (localita, data, id_giorno_previsione, temp_min, temp_max, fascia, " \
+        query = "INSERT into previsione (localita, data, id_previsione_giorno, temp_min, temp_max, fascia, " \
                 "id_prec_prob, desc_prec_prob, id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, " \
                 "id_vento_dir_alt, desc_vento_dir_alt, id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val) " \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -130,7 +113,7 @@ class MySQLStationManager:
             cursor.execute(query, (
                 previsione.localita,
                 previsione.data,
-                previsione.id_girno_previsione,
+                previsione.id_previsione_giorno,
                 previsione.temp_min,
                 previsione.temp_max,
                 previsione.fascia,
@@ -152,17 +135,17 @@ class MySQLStationManager:
 
     def list(self) -> List[Previsione]:
         cursor = self.connection.cursor()
-        query = "SELECT localita, data, id_giorno_previsione, temp_min, temp_max, fascia, " \
+        query = "SELECT localita, data, id_previsione_giorno, temp_min, temp_max, fascia, " \
                 "id_prec_prob, desc_prec_prob, id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, " \
                 "id_vento_dir_alt, desc_vento_dir_alt, id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val from previsione"
         cursor.execute(query)
 
         previsioni = []
-        for localita, data, id_giorno_previsione, temp_min, temp_max, fascia, id_prec_prob, desc_prec_prob, id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, id_vento_dir_alt, desc_vento_dir_alt, id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val in cursor:
+        for localita, data, id_previsione_giorno, temp_min, temp_max, fascia, id_prec_prob, desc_prec_prob, id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, id_vento_dir_alt, desc_vento_dir_alt, id_vento_val, desc_vento_val, id_dir_vento_val, desc_dir_vento_val in cursor:
             previsioni.append(Previsione(
                 localita,
                 data,
-                id_giorno_previsione,
+                id_previsione_giorno,
                 temp_min,
                 temp_max,
                 fascia,
