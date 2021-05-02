@@ -1,7 +1,7 @@
 #print("ciao mondooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
 # ciao
-import schedule
-import time
+'''import schedule
+import time'''
 
 print("ciao")
 '''f= open("guru99.txt","w+")
