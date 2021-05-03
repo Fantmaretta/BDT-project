@@ -198,23 +198,23 @@ if __name__ == "__main__":
 
     fetch_dati = FetchDati()
 
-    dati_manager = MySQLDatiRealiManager()
+    #dati_manager = MySQLDatiRealiManager()
 
-    file1 = open("/home/veror/PycharmProjects/BDT project/pickle/both_zip_stations_codes.pickle", 'rb')
+    file1 = open("/pickle/both_zip_stations_codes.pickle", 'rb')
     list_station_codes_names = pickle.load(file1)
     '''file2 = open("/home/veror/PycharmProjects/BDT project/pickle/file_zip_code_name1.pickle", 'rb')
     list_station_codes_names = pickle.load(file2)'''
 
     list_time = create_times_day()
 
-    dati = fetch_dati.fetch_data(' http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=',
-                         list_station_codes_names)
+    #dati = fetch_dati.fetch_data(' http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=',
+                         #list_station_codes_names)
 
-    tot_dati = fetch_dati.from_fetch_to_repr_tot_stations(dati, list_time)
+    #tot_dati = fetch_dati.from_fetch_to_repr_tot_stations(dati, list_time)
 
     #print(tot_dati)
 
-    dati_manager.save(tot_dati)
+    #dati_manager.save(tot_dati)
 
 
 
