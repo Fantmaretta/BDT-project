@@ -1,6 +1,16 @@
 #print("ciao mondooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
 # ciao
+import requests
+from typing import List
+import pickle
+import xml.etree.cElementTree as ET
+from datetime import datetime, timedelta
+from dati_reali import DatiReali, MySQLDatiRealiManager
+import time
+from prediction import Previsione, MysqlPrevisioniManager
 
+
+x = datetime.strptime('2021/05/03', '%Y/%m/%d')
 
 print("ciao")
 f= open("guru99.txt","w+")
