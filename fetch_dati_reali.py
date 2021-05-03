@@ -207,12 +207,12 @@ if __name__ == "__main__":
 
     list_time = create_times_day()
 
-    #dati = fetch_dati.fetch_data(' http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=',
-                         #list_station_codes_names)
+    dati = fetch_dati.fetch_data(' http://dati.meteotrentino.it/service.asmx/ultimiDatiStazione?codice=',
+                         list_station_codes_names)
 
-    #tot_dati = fetch_dati.from_fetch_to_repr_tot_stations(dati, list_time)
+    tot_dati = fetch_dati.from_fetch_to_repr_tot_stations(dati, list_time)
 
-    #print(tot_dati)
+    print(tot_dati)
 
     #dati_manager.save(tot_dati)
 
