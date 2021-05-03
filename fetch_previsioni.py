@@ -96,7 +96,7 @@ if __name__ == "__main__":
     prev_no_stations = fetch_previsioni.remove_not_station(pred, list_station_name)
     #both = get_both(pred, list_station_name)
 
-    #print(prev_no_stations)
+    print(prev_no_stations)
     '''for i in prev_no_stations:
         print(Previsione.to_repr(i))'''
     #previsioni_manager.save(prev_no_stations)
