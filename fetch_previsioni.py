@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
     pred = fetch_previsioni.fetch_prediction("https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita")
 
-    file = open("/home/veror/PycharmProjects/BDT project/pickle/file_name1.pickle", 'rb')
+    file = open("pickle/file_name1.pickle", 'rb')
     list_station_name = pickle.load(file)
     prev_no_stations = fetch_previsioni.remove_not_station(pred, list_station_name)
     #both = get_both(pred, list_station_name)
