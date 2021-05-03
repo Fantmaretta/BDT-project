@@ -198,7 +198,7 @@ if __name__ == "__main__":
 
     fetch_dati = FetchDati()
 
-    #dati_manager = MySQLDatiRealiManager()
+    dati_manager = MySQLDatiRealiManager()
 
     file1 = open("pickle/both_zip_stations_codes.pickle", 'rb')
     list_station_codes_names = pickle.load(file1)
@@ -212,9 +212,13 @@ if __name__ == "__main__":
 
     tot_dati = fetch_dati.from_fetch_to_repr_tot_stations(dati, list_time)
 
-    print(tot_dati)
+    print("done")
 
-    #dati_manager.save(tot_dati)
+    dati_manager.save(tot_dati)
+
+    print("DONE")
+
+
 
 
 
