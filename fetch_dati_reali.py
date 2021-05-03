@@ -200,7 +200,7 @@ if __name__ == "__main__":
 
     #dati_manager = MySQLDatiRealiManager()
 
-    file1 = open("/pickle/both_zip_stations_codes.pickle", 'rb')
+    file1 = open("~/pickle/both_zip_stations_codes.pickle", 'rb')
     list_station_codes_names = pickle.load(file1)
     '''file2 = open("/home/veror/PycharmProjects/BDT project/pickle/file_zip_code_name1.pickle", 'rb')
     list_station_codes_names = pickle.load(file2)'''
