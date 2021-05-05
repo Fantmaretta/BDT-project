@@ -5,6 +5,9 @@ import xml.etree.cElementTree as ET
 from datetime import datetime, timedelta
 from dati_reali import DatiReali, MySQLDatiRealiManager
 import time
+import os
+
+os.path.dirname(os.path.abspath(__file__))
 
 
 def create_times_day():
