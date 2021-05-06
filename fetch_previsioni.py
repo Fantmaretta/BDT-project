@@ -98,11 +98,11 @@ if __name__ == "__main__":
     prev_no_stations = fetch_previsioni.remove_not_station(pred, list_station_name)
     #both = get_both(pred, list_station_name)
 
-    '''f = open("guru99.txt", "w+")
+    f = open("guru99.txt", "w+")
     for i in range(10):
         f.write("This is line %d\r\n" % (i + 1))
         print("ciao ciao ciao")
-    f.close()'''
+    f.close()
 
     print(prev_no_stations)
     '''for i in prev_no_stations:
