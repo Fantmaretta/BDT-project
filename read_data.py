@@ -24,11 +24,11 @@ import pyspark # only run after findspark.init()
 from pyspark.sql import SparkSession
 #spark = SparkSession.builder.getOrCreate()
 
-os.environ['SPARK_CLASSPATH'] = "/usr/share/java/mysql-connector-java-5.1.34-bin.jar"
+#os.environ['SPARK_CLASSPATH'] = "/usr/share/java/mysql-connector-java-5.1.34-bin.jar"
 
 sparkConnector = SparkSession.builder.appName("Connector_to_MySQL_BDT")\
         .config("spark.driver.extraClassPath",
-                "/home/veror/PycharmProjects/BDT project/JDBC_connector/mysql-connector-java-5.1.46-bin.jar")\
+                "JDBC_connector/mysql-connector-java-8.0.25.jar")\
         .master('local[*]') \
         .enableHiveSupport()\
         .getOrCreate()
