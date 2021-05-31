@@ -49,11 +49,11 @@ sparkConnector = SparkSession.builder.appName("Connector_to_MySQL_BDT")\
 
 connect_mysql = sparkConnector.read\
     .format("jdbc") \
-    .option("url", "jdbc:mysql:bdtmysql.cvpe8im7hapy.us-east-2.rds.amazonaws.com:3306") \
+    .option("url", "jdbc:mysql://bdtmysql.cvpe8im7hapy.us-east-2.rds.amazonaws.com:3306") \
     .option("dbtable", "bdt_db_mysql.dati_reali") \
     .option("user", "root_bdt") \
     .option("password", "bdt_mysql") \
-    .option("driver", 'com.mysql.jdbc.Driver') \
+    .option("driver", 'com.mysql.cj.jdbc.Driver') \
     .load()
 
 
