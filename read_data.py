@@ -1,9 +1,9 @@
-from pyspark.python.pyspark.shell import sqlContext
-from pyspark.sql import SparkSession
+#from pyspark.python.pyspark.shell import sqlContext
+#from pyspark.sql import SparkSession
 #import findspark
-import os
-from pyspark import SparkConf, SparkContext
-import numpy
+#import os
+#from pyspark import SparkConf, SparkContext
+#import numpy
 #import java.util.Properties import org.apache.spark.sql.{Row,SparkSession} import org.apache.spark.sql.SaveMode
 
 
