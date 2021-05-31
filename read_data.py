@@ -1,6 +1,6 @@
 from pyspark.python.pyspark.shell import sqlContext
 from pyspark.sql import SparkSession
-import findspark
+#import findspark
 import os
 from pyspark import SparkConf, SparkContext
 
@@ -17,8 +17,7 @@ sc = SparkContext.getOrCreate(conf=conf)
 #spark = SparkSession.builder.config("spark.driver.extraClassPath", "/home/veror/Desktop/mysql-connector-java-8.0.25")
 
 
-'''import findspark
-findspark.init()'''
+#findspark.init()
 
 import pyspark # only run after findspark.init()
 from pyspark.sql import SparkSession
