@@ -44,27 +44,27 @@ def df_12(df_dati):
 
     # df containing localita, data, fascia, avg temperatura
     d_avg_temp = compute_avg(df_dati, 'localita', 'data', 'fascia', 'temperatura')
-    d_avg_temp.show()
+    #d_avg_temp.show()
 
     # df containing localita, data, fascia, avg pioggia
     d_avg_pioggia = compute_avg(df_dati, 'localita', 'data', 'fascia', 'pioggia')
-    d_avg_pioggia.show()
+    #d_avg_pioggia.show()
 
     # df containing localita, data, fascia, avg vento_velocita
     d_avg_vento_velocita = compute_avg(df_dati, 'localita', 'data', 'fascia', 'vento_velocita')
-    d_avg_vento_velocita.show()
+    #d_avg_vento_velocita.show()
 
     # df containing localita, data, fascia, avg vento_direzione
     d_avg_vento_direzione = compute_avg(df_dati, 'localita', 'data', 'fascia', 'vento_direzione')
-    d_avg_vento_direzione.show()
+    #d_avg_vento_direzione.show()
 
     # df containing localita, data, fascia, temperatura min
     d_temp_min = compute_min(df_dati, 'localita', 'data', 'fascia', 'temperatura')
-    d_temp_min.show()
+    #d_temp_min.show()
 
     # df containing localita, data, fascia, temperatura max
     d_temp_max = compute_max(df_dati, 'localita', 'data', 'fascia', 'temperatura')
-    d_temp_max.show()
+    #d_temp_max.show()
 
     # joined df for fascia 1 2
     joined_df = d_avg_temp.join(d_avg_pioggia, ['localita', 'data', 'fascia'])\
@@ -89,31 +89,31 @@ def df_345(joined_df):
 
     find_fascia_udf = udf(find_fascia, StringType())
     joined_df_extension = joined_df.withColumn('fascia_extended', find_fascia_udf(joined_df.fascia))
-    joined_df_extension.show()
+    #joined_df_extension.show()
 
     # df containing localita, data, fascia, avg temperatura
     d_avg_temp = compute_avg(joined_df_extension, 'localita', 'data', 'fascia_extended', 'avg(temperatura)')
-    d_avg_temp.show()
+    #d_avg_temp.show()
 
     # df containing localita, data, fascia, avg pioggia
     d_avg_pioggia = compute_avg(joined_df_extension, 'localita', 'data', 'fascia_extended', 'avg(pioggia)')
-    d_avg_pioggia.show()
+    #d_avg_pioggia.show()
 
     # df containing localita, data, fascia, avg vento_velocita
     d_avg_vento_velocita = compute_avg(joined_df_extension, 'localita', 'data', 'fascia_extended', 'avg(vento_velocita)')
-    d_avg_vento_velocita.show()
+    #d_avg_vento_velocita.show()
 
     # df containing localita, data, fascia, avg vento_direzione
     d_avg_vento_direzione = compute_avg(joined_df_extension, 'localita', 'data', 'fascia_extended', 'avg(vento_direzione)')
-    d_avg_vento_direzione.show()
+    #d_avg_vento_direzione.show()
 
     # df containing localita, data, fascia, temperatura min
     d_temp_min = compute_min(joined_df_extension, 'localita', 'data', 'fascia_extended', 'min(temperatura)')
-    d_temp_min.show()
+    #d_temp_min.show()
 
     # df containing localita, data, fascia, temperatura max
     d_temp_max = compute_max(joined_df_extension, 'localita', 'data', 'fascia_extended', 'max(temperatura)')
-    d_temp_max.show()
+    #d_temp_max.show()
 
     # joined df for fascia 3 4 5
     joined_df_tot = d_avg_temp.join(d_avg_pioggia, ['localita', 'data', 'fascia_extended'])\
@@ -126,8 +126,3 @@ def df_345(joined_df):
 
     return(joined_df_tot)
 
-
-# main
-df_dati = initialize_df_d("csv files/dati_reali_.csv")
-df_12_d = df_12(df_dati)
-df_345_d = df_345(df_12_d)
