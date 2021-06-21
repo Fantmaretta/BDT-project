@@ -17,8 +17,6 @@ def initialize_df_p(df_path):
         .config("spark.some.config.option", "some-value") \
         .getOrCreate()
 
-    # previsioni
-
     df_previsioni = spark.read.csv(df_path, header=True, sep=",")
     df_previsioni = df_previsioni.orderBy('localita', 'data', 'id_previsione_giorno')
 
@@ -60,7 +58,7 @@ def find_vento(x):
 
 def df_12_p(df_previsioni):
 
-    # create df with only 0 1 2 fasce
+    # create df with only 1 2 fasce
     df_previsioni_12 = df_previsioni.filter(df_previsioni['id_previsione_giorno'] != 3)\
         .filter(df_previsioni['id_previsione_giorno'] != 4)\
         .filter(df_previsioni['id_previsione_giorno'] != 5)\
@@ -86,6 +84,3 @@ def df_345_p(df_previsioni):
 
     return df_previsioni_345
 
-df_previsioni = initialize_df_p("csv files/df_previsioni.csv")
-df_12_p = df_12_p(df_previsioni)
-df_345_p = df_345_p(df_previsioni)
