@@ -1,11 +1,15 @@
 from pyspark.sql import SparkSession
 import findspark
 import pandas as pd
+import datetime as dt
+
 
 # code to save database content into csv file to have it to read it as dataframe pyspark
 
-'''findspark.init()
 
+findspark.init()
+
+# initiate spark session
 sparkConnector = SparkSession.builder.appName("Connector_to_MySQL_BDT")\
         .config("spark.driver.extraClassPath",
                 "JDBC_connector/mysql-connector-java-8.0.25.jar")\
@@ -27,8 +31,8 @@ df_previsioni = sparkConnector.read\
     .option("query", query_previsioni)\
     .load()
 # .option("dbtable", "bdt_db_mysql.dati_reali")
+#df_previsioni.show()
 
-df_previsioni.show()
 # save into csv
 df_previsioni.toPandas().to_csv('df_previsioni.csv')
 
@@ -47,30 +51,31 @@ df_dati_reali = sparkConnector.read\
     .option("driver", 'com.mysql.cj.jdbc.Driver') \
     .option("query", query_dati_reali)\
     .load()
+#df_dati_reali.show()
 
-df_dati_reali.show()
 # save into csv
-df_dati_reali.toPandas().to_csv('df_dati_reali.csv')'''
+df_dati_reali.toPandas().to_csv('df_dati_reali.csv')
 
 
-
-'''# transform time column of dati_reali to get only time (not date) -> cleaning
-df_dati_reali_ok = pd.read_csv('csv files/df_dati_reali.csv')
-df_dati_reali_ok['time'] = pd.to_datetime(df_dati_reali_ok['time']).apply(lambda x: x.time())
-df_dati_reali_ok.to_csv('csv files/csv_dati_reali_ok.csv')'''
-
-
+# add column containing corresponding time range
 df_dati_reali_ok = pd.read_csv('csv files/csv_dati_reali_ok.csv')
-for el in df_dati_reali_ok['time']:
-    if el >= '00:00:00' and el < '06:00:00':
-        df_dati_reali_ok['fascia'] = '00-06'
-    elif el >= '06:00:00' and el < '12:00:00':
-        df_dati_reali_ok['fascia'] = '06-12'
-    elif el >= '12:00:00' and el < '18:00:00':
-        df_dati_reali_ok['fascia'] = '12-18'
-    elif el >= '18:00:00':
-        df_dati_reali_ok['fascia'] = '18-24'
-print(df_dati_reali_ok)
+df_dati_reali_ok['time'] = pd.to_datetime(df_dati_reali_ok['time'])
+df_dati_reali_ok['time'] = [time.time() for time in df_dati_reali_ok['time']]
+
+
+# create column containing corresponding fascia oraria
+df_dati_reali_ok['fascia'] = 0
+
+for index, row in df_dati_reali_ok.iterrows():
+    if row['time'] >= dt.time(0,0,0) and row['time'] < dt.time(6,0,0):
+        df_dati_reali_ok['fascia'][index] = '00-06'
+    elif row['time']  >= dt.time(6,0,0) and row['time'] < dt.time(12,0,0):
+        df_dati_reali_ok['fascia'][index] = '06-12'
+    elif row['time']  >= dt.time(12,0,0) and row['time']  < dt.time(18,0,0):
+        df_dati_reali_ok['fascia'][index] = '12-18'
+    else:
+        df_dati_reali_ok['fascia'][index] = '18-24'
+
 df_dati_reali_ok.to_csv('csv files/dati_reali_.csv')
 
 
