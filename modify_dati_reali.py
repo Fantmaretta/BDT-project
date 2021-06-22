@@ -8,6 +8,7 @@ from pyspark.sql.types import StringType
 
 
 def initialize_df_d(df_path):
+
     spark = SparkSession \
         .builder \
         .appName("Python Spark SQL") \
@@ -125,4 +126,73 @@ def df_345(joined_df):
     joined_df_tot.show()
 
     return(joined_df_tot)
+
+
+def find_prec_int(x):
+        if x == None:
+            return None
+        elif x >= 0 and x < 5:
+            return '1'
+        elif x >= 5 and x < 15:
+            return '2'
+        elif x >= 15 and x <= 40:
+            return '3'
+        elif x >= 40:
+            return '4'
+        else:
+            return None
+
+def find_vento_dir(x):
+    if x == None:
+        return None
+    elif x >= 348.76 or x <= 11.25:
+        return '1'
+    elif x >= 11.26 and x <= 33.75:
+        return '2'
+    elif x >= 33.76 and x <= 56.25:
+        return '3'
+    elif x >= 56.26 and x <= 78.75:
+        return '4'
+    elif x >= 78.76 and x <= 101.25:
+        return  '5'
+    elif x >= 101.26 and x <= 123.75:
+        return '6'
+    elif x >= 123.76 and x <= 146.25:
+        return '7'
+    elif x >= 146.26 and x <= 169.75:
+        return '8'
+    elif x >= 169.76 and x <= 191.25:
+        return '9'
+    elif x >= 191.26 and x <= 213.75:
+        return '10'
+    elif x >= 213.76 and x <= 236.25:
+        return  '11'
+    elif x >= 236.26 and x < 258.75:
+        return '12'
+    elif x >= 258.76 and x <= 281.25:
+        return '13'
+    elif x >= 281.26 and x <= 303.75:
+        return  '14'
+    elif x >= 303.76 and x <= 326.25:
+        return '15'
+    elif x >= 326.26 and x <= 348.75:
+        return '16'
+    else:
+        return None
+
+def find_vento_int(x):
+    if x == None:
+        return None
+    elif x >= 0 and x < 0.5:
+        return '1'
+    elif x >= 0.5 and x < 4:
+        return '2'
+    elif x >= 4 and x < 8:
+        return '3'
+    elif x >= 8 and x < 14:
+        return '4'
+    elif x >= 14:
+        return '5'
+    else:
+        return None
 
