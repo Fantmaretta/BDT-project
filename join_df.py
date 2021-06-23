@@ -38,8 +38,6 @@ df_345_d = df_345_d.withColumn('prec_dati', find_prec_int_udf(df_345_d['avg(avg(
 df_12 = df_12_d.join(df_12_p, ['localita', 'data', 'fascia'])
 df_345 = df_345_d.join(df_345_p, ['localita', 'data', 'fascia_extended'])
 
-# TODO ELIMINATE not useful columns from df_12 and df_345 RENAME dati/previsioni
-# TODO save into csv -> df_previsioni.toPandas().to_csv('df_previsioni.csv')
 # TODO y / n
 # TODO probabilita prec ???
 # TODO ec2 / docker
@@ -47,3 +45,15 @@ df_345 = df_345_d.join(df_345_p, ['localita', 'data', 'fascia_extended'])
 
 df_12.show()
 df_345.show()
+
+columns_drop = ['desc_prec_prob', 'desc_prec_int', 'id_vento_alt', 'desc_vento_alt', 'id_vento_dir_alt', \
+                'desc_vento_dir_alt', 'desc_vento_val', 'desc_vento_dir_val']
+
+df_12 = df_12.drop(*columns_drop)
+df_345 = df_345.drop(*columns_drop)
+
+df_12.show()
+df_345.show()
+
+df_12.toPandas().to_csv('df_12.csv')
+df_345.toPandas().to_csv('df_345.csv')
