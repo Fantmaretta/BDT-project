@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
-from pyspark.sql.types import FloatType
+from pyspark.sql.functions import udf, col
+from pyspark.sql.types import FloatType, StringType
 import numpy as np
 import pyspark.sql.functions as F
 
@@ -25,18 +25,44 @@ def from_csv(csv_path):
 df_12 = from_csv('csv files/df_12.csv')
 df_345 = from_csv('csv files/df_345.csv')
 
-def correspondence_y_n(df, c1, c2, c_name):
-    return df.withColumn(c_name, F.when((F.col(c1) == F.col(c2)), 'Y').otherwise('N'))
+def def_accuracy_range(index_1, index_2):
+    if (index_1 == None or index_2 == None):
+        return None
+    if (index_2 == (index_1 + 1) or index_2 == (index_1 - 1)):
+        return 'medium'
+    elif index_1 == index_2:
+        return 'high'
+    else:
+        return 'inaccurate'
 
-df_12 = correspondence_y_n(df_12, 'id_prec_int', 'prec_dati', 'compare_pioggia')
-df_12 = correspondence_y_n(df_12, 'id_vento_val', 'intensita_vento_dati', 'compare_vento_vel')
-df_12 = correspondence_y_n(df_12, 'id_vento_dir_val', 'direzione_vento_dati', 'compare_vento_dir')
+def_accuracy_range_udf = udf(def_accuracy_range, StringType())
 
-df_345 = correspondence_y_n(df_345, 'id_prec_int', 'prec_dati', 'compare_pioggia')
-df_345 = correspondence_y_n(df_345, 'id_vento_val', 'intensita_vento_dati', 'compare_vento_vel')
-df_345 = correspondence_y_n(df_345, 'id_vento_dir_val', 'direzione_vento_dati', 'compare_vento_dir')
+def correspondance_dati_prev(df, c1, c2, c_name):
+    return df.withColumn(c_name, def_accuracy_range_udf(c1, c2))
+
+'''def correspondence_y_n(df, c1, c2, c_name):
+    return df.withColumn(c_name, F.when(((col(c1) == col(c2)) & (col(c1).isNotNull()) & (col(c2).isNotNull())), 'Y').\
+                         when(((col(c1) != col(c2)) & (col(c1).isNull()) & (col(c2).isNull())), 'Y').otherwise('N'))'''
+
+df_12 = correspondance_dati_prev(df_12, df_12.prec_dati, df_12.id_prec_int, 'compare_piogge')
+df_12 = correspondance_dati_prev(df_12, df_12.intensita_vento_dati, df_12.id_vento_val, 'compare_vento_vel')
+df_12 = correspondance_dati_prev(df_12,  df_12.direzione_vento_dati, df_12.id_vento_dir_val,'compare_vento_dir')
+
+df_345 = correspondance_dati_prev(df_345, df_345.prec_dati, df_345.id_prec_int, 'compare_pioggia')
+df_345 = correspondance_dati_prev(df_345, df_345.intensita_vento_dati, df_345.id_vento_val, 'compare_vento_vel')
+df_345 = correspondance_dati_prev(df_345, df_345.direzione_vento_dati, df_345.id_vento_dir_val, 'compare_vento_dir')
 
 df_12.show()
 df_345.show()
 
-# todo filter none when doing compu
+# todo filter none when doing compu / if prec < 0
+# todo range temp
+
+spark = SparkSession \
+        .builder \
+        .appName("Python Spark SQL") \
+        .config("spark.some.config.option", "some-value") \
+        .getOrCreate()
+
+df_previsioni = spark.read.csv('csv files/df_12.csv', header=True, sep=",")
+df_previsioni.show()
