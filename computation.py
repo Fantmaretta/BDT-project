@@ -56,7 +56,7 @@ df_12.show()
 df_345.show()
 
 # todo filter none when doing compu / if prec < 0
-# todo range temp prec
+# todo range temp precis
 
 spark = SparkSession \
         .builder \
