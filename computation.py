@@ -139,5 +139,5 @@ if __name__ == "__main__":
     acc_prev(df_345, 'compare_temp_min', '_345_null', False)'''
 
 
-    # todo
+    # todo for 
     acc_prev_giorno(df_12, 'compare_pioggia', 'id_previsione_giorno', 1.0, True)
