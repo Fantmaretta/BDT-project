@@ -74,10 +74,9 @@ class StationAnagrafica:
         print(short_names)'''
 
 
-
-# questo da spostere nel main
-station_anagrafica = StationAnagrafica()
-station_anagrafica.get_station_anagrafica("http://dati.meteotrentino.it/service.asmx/listaStazioni", 'stations.xml')
+if __name__ == "__main__":
+    station_anagrafica = StationAnagrafica()
+    station_anagrafica.get_station_anagrafica("http://dati.meteotrentino.it/service.asmx/listaStazioni", 'stations.xml')
 
 
 
