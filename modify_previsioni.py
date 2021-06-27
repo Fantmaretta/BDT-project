@@ -28,32 +28,6 @@ def initialize_df_p(df_path):
 
     return df_previsioni
 
-
-'''def find_prec(x):
-    if x == '-1':
-        return None
-    elif x == '1':
-        return '0-5'
-    elif x == '2':
-        return '5-15'
-    elif x == '3':
-        return '15-40'
-    else:
-        return '> 40'
-
-def find_vento(x):
-    if x == '1':
-        return '0-0.5'
-    elif x == '2':
-        return '0.5-4'
-    elif x == '3':
-        return '4-8'
-    elif x == '4':
-        return '8-14'
-    else:
-        return '> 14'
-'''
-
 def df_12_p(df_previsioni):
 
     # create df with only 1 2 giorni
