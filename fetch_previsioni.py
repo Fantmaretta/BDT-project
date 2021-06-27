@@ -105,8 +105,7 @@ if __name__ == "__main__":
     f.close()
 
     print(prev_no_stations)
-    '''for i in prev_no_stations:
-        print(Previsione.to_repr(i))'''
+
     previsioni_manager.save(prev_no_stations)
 
 
