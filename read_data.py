@@ -7,7 +7,7 @@ import datetime as dt
 # code to save database content into csv file to have it to read it as dataframe pyspark
 
 if __name__ == "__main__":
-    
+
     findspark.init()
 
     # initiate spark session
