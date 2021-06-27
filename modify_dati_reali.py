@@ -31,14 +31,14 @@ def initialize_df_d(df_path):
     # drop rows with temperature = null -> not necessary since wgen doing avg it does it by itself
     #df_dati = df_dati.na.drop(subset=["temperatura"])
 
-def compute_avg(df, l, d, f, var):
+def compute_avg(df, l, d, f, var): # on fascia
     return df.groupBy(l, d, f).avg(var).orderBy(d, l, f)
 
-def compute_min(df, l, d, f, var):
-    return df.groupBy(l, d, f).min(var).orderBy(d, l, f)
+def compute_min(df, l, d, var): # on total day, not fascia
+    return df.groupBy(l, d).min(var).orderBy(d, l)
 
-def compute_max(df, l, d, f, var):
-    return df.groupBy(l, d, f).max(var).orderBy(d, l, f)
+def compute_max(df, l, d, var): # on total day, not fascia
+    return df.groupBy(l, d).max(var).orderBy(d, l)
 
 
 def df_12(df_dati):
@@ -60,19 +60,19 @@ def df_12(df_dati):
     #d_avg_vento_direzione.show()
 
     # df containing localita, data, fascia, temperatura min
-    d_temp_min = compute_min(df_dati, 'localita', 'data', 'fascia', 'temperatura')
-    #d_temp_min.show()
+    d_temp_min = compute_min(df_dati, 'localita', 'data', 'temperatura')
+    d_temp_min.show()
 
     # df containing localita, data, fascia, temperatura max
-    d_temp_max = compute_max(df_dati, 'localita', 'data', 'fascia', 'temperatura')
-    #d_temp_max.show()
+    d_temp_max = compute_max(df_dati, 'localita', 'data', 'temperatura')
+    d_temp_max.show()
 
     # joined df for fascia 1 2
     joined_df = d_avg_temp.join(d_avg_pioggia, ['localita', 'data', 'fascia'])\
         .join(d_avg_vento_velocita, ['localita', 'data', 'fascia'])\
         .join(d_avg_vento_direzione, ['localita', 'data', 'fascia'])\
-        .join(d_temp_min, ['localita', 'data', 'fascia'])\
-        .join(d_temp_max, ['localita', 'data', 'fascia'])\
+        .join(d_temp_min, ['localita', 'data'])\
+        .join(d_temp_max, ['localita', 'data'])\
         .orderBy('data', 'localita', 'fascia')
     joined_df.show()
 
@@ -109,19 +109,19 @@ def df_345(joined_df):
     #d_avg_vento_direzione.show()
 
     # df containing localita, data, fascia, temperatura min
-    d_temp_min = compute_min(joined_df_extension, 'localita', 'data', 'fascia_extended', 'min(temperatura)')
+    d_temp_min = compute_min(joined_df_extension, 'localita', 'data', 'min(temperatura)')
     #d_temp_min.show()
 
     # df containing localita, data, fascia, temperatura max
-    d_temp_max = compute_max(joined_df_extension, 'localita', 'data', 'fascia_extended', 'max(temperatura)')
+    d_temp_max = compute_max(joined_df_extension, 'localita', 'data', 'max(temperatura)')
     #d_temp_max.show()
 
     # joined df for fascia 3 4 5
     joined_df_tot = d_avg_temp.join(d_avg_pioggia, ['localita', 'data', 'fascia_extended'])\
         .join(d_avg_vento_velocita, ['localita', 'data', 'fascia_extended'])\
         .join(d_avg_vento_direzione, ['localita', 'data', 'fascia_extended'])\
-        .join(d_temp_min, ['localita', 'data', 'fascia_extended'])\
-        .join(d_temp_max, ['localita', 'data', 'fascia_extended'])\
+        .join(d_temp_min, ['localita', 'data'])\
+        .join(d_temp_max, ['localita', 'data'])\
         .orderBy('data', 'localita', 'fascia_extended')
     joined_df_tot.show()
 
