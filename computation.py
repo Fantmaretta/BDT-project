@@ -66,9 +66,11 @@ def acc_prev(df, column, df_name, exclude_null):
                       .withColumn('total', F.lit(total))
                       .withColumn('fraction', F.expr('count/total')))
     res.show()
-    x = 'results/' + df_name + column + '.csv'
-    print(x)
-    res.toPandas().to_csv('results/' + df_name + column + '.csv')
+
+    if exclude_null:
+        res.toPandas().to_csv('results/' + df_name + column + '.csv')
+    else:
+        res.toPandas().to_csv('results/NULL_' + df_name + column + '.csv')
     return res
 
 def acc_prev_giorno(df, column, id_giorno_prev_col, id_giorno_prev, exclude_null):
@@ -85,9 +87,16 @@ def acc_prev_giorno(df, column, id_giorno_prev_col, id_giorno_prev, exclude_null
                       .withColumn('total', F.lit(total))
                       .withColumn('fraction', F.expr('count/total')))
     res.show()
-    x = 'results/' + str(id_giorno_prev) + column + '.csv'
-    print(x)
-    res.toPandas().to_csv('results/' + str(id_giorno_prev) + column + '.csv')
+
+    if exclude_null:
+        x = 'results/' + str(id_giorno_prev) + column + '.csv'
+        print(x)
+        res.toPandas().to_csv('results/' + str(id_giorno_prev) + column + '.csv')
+    else:
+        x = 'results/NULL_' + str(id_giorno_prev) + column + '.csv'
+        print(x)
+        res.toPandas().to_csv('results/NULL_' + str(id_giorno_prev) + column + '.csv')
+
     return res
 
 if __name__ == "__main__":
@@ -139,5 +148,28 @@ if __name__ == "__main__":
     acc_prev(df_345, 'compare_temp_min', '_345_null', False)'''
 
 
-    # todo for 
-    acc_prev_giorno(df_12, 'compare_pioggia', 'id_previsione_giorno', 1.0, True)
+
+    for i in range(1, 3):
+        acc_prev_giorno(df_12, 'compare_pioggia', 'id_previsione_giorno', float(i), True)
+        acc_prev_giorno(df_12, 'compare_pioggia', 'id_previsione_giorno', float(i), False)
+        acc_prev_giorno(df_12, 'compare_vento_vel', 'id_previsione_giorno', float(i), True)
+        acc_prev_giorno(df_12, 'compare_vento_vel', 'id_previsione_giorno', float(i), False)
+        acc_prev_giorno(df_12, 'compare_vento_dir', 'id_previsione_giorno', float(i), True)
+        acc_prev_giorno(df_12, 'compare_vento_dir', 'id_previsione_giorno', float(i), False)
+        acc_prev_giorno(df_12, 'compare_temp_max', 'id_previsione_giorno', float(i), True)
+        acc_prev_giorno(df_12, 'compare_temp_max', 'id_previsione_giorno', float(i), False)
+        acc_prev_giorno(df_12, 'compare_temp_min', 'id_previsione_giorno', float(i), True)
+        acc_prev_giorno(df_12, 'compare_temp_min', 'id_previsione_giorno', float(i), False)
+
+    for i in range(3, 6):
+        acc_prev_giorno(df_345, 'compare_pioggia', 'id_previsione_giorno', float(i), True)
+        acc_prev_giorno(df_345, 'compare_pioggia', 'id_previsione_giorno', float(i), False)
+        acc_prev_giorno(df_345, 'compare_vento_vel', 'id_previsione_giorno', float(i), True)
+        acc_prev_giorno(df_345, 'compare_vento_vel', 'id_previsione_giorno', float(i), False)
+        acc_prev_giorno(df_345, 'compare_vento_dir', 'id_previsione_giorno', float(i), True)
+        acc_prev_giorno(df_345, 'compare_vento_dir', 'id_previsione_giorno', float(i), False)
+        acc_prev_giorno(df_345, 'compare_temp_max', 'id_previsione_giorno', float(i), True)
+        acc_prev_giorno(df_345, 'compare_temp_max', 'id_previsione_giorno', float(i), False)
+        acc_prev_giorno(df_345, 'compare_temp_min', 'id_previsione_giorno', float(i), True)
+        acc_prev_giorno(df_345, 'compare_temp_min', 'id_previsione_giorno', float(i), False)
+
