@@ -10,7 +10,7 @@ if __name__ == "__main__":
     df_345_p = df_345_p.withColumnRenamed('fascia', 'fascia_extended')
     df_345_p.show()
 
-    df_dati = initialize_df_d("csv files/dati_reali_.csv")
+    df_dati = initialize_df_d("csv files/df_dati_reali_.csv")
     df_12_d = df_12(df_dati)
     df_345_d = df_345(df_12_d)
 
