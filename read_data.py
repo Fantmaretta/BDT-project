@@ -32,10 +32,10 @@ if __name__ == "__main__":
         .option("query", query_previsioni)\
         .load()
     # .option("dbtable", "bdt_db_mysql.dati_reali")
-    #df_previsioni.show()
+    df_previsioni.show()
 
     # save into csv
-    df_previsioni.toPandas().to_csv('df_previsioni.csv')
+    df_previsioni.toPandas().to_csv('csv files/df_previsioni.csv')
 
     #df_previsioni.rdd.saveAsPickleFile('pickle/df_previsioni.pickle')
 
@@ -54,12 +54,15 @@ if __name__ == "__main__":
         .load()
     #df_dati_reali.show()
 
+    # keep only observations with 0-5 type of days
+    df_dati_reali = df_dati_reali.filter(df_dati_reali.data >= "2021-05-07")
+
     # save into csv
-    df_dati_reali.toPandas().to_csv('df_dati_reali.csv')
+    df_dati_reali.toPandas().to_csv('csv files/df_dati_reali.csv')
 
 
     # add column containing corresponding time range
-    df_dati_reali_ok = pd.read_csv('csv files/csv_dati_reali_ok.csv')
+    df_dati_reali_ok = pd.read_csv('csv files/df_dati_reali.csv')
     df_dati_reali_ok['time'] = pd.to_datetime(df_dati_reali_ok['time'])
     df_dati_reali_ok['time'] = [time.time() for time in df_dati_reali_ok['time']]
 
@@ -77,7 +80,7 @@ if __name__ == "__main__":
         else:
             df_dati_reali_ok['fascia'][index] = '18-24'
 
-    df_dati_reali_ok.to_csv('csv files/dati_reali_.csv')
+    df_dati_reali_ok.to_csv('csv files/df_dati_reali_ok.csv')
 
 
 # TODO save database into dataframes -> add column fascia oraria to dati_reali, do avg for localita, data, fascia oraria
