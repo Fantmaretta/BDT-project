@@ -112,7 +112,7 @@ if __name__ == "__main__":
     df_12 = from_csv('csv files/df_12.csv')
     df_345 = from_csv('csv files/df_345.csv')
 
-    df_12 = df_12.filter(df_12.localita == "zuclo")
+    #df_12 = df_12.filter(df_12.localita == "zuclo")
 
     def_accuracy_range_udf = udf(def_accuracy_range, StringType())
 
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     df_12.show()
     df_345.show()
 
-    '''acc_prev(df_12, 'compare_pioggia', '_12_', True)
+    acc_prev(df_12, 'compare_pioggia', '_12_', True)
     acc_prev(df_12, 'compare_vento_vel', '_12_', True)
     acc_prev(df_12, 'compare_vento_dir', '_12_', True)
     acc_prev(df_12, 'compare_temp_max', '_12_', True)
@@ -155,11 +155,11 @@ if __name__ == "__main__":
     acc_prev(df_345, 'compare_vento_vel', '_345_null', False)
     acc_prev(df_345, 'compare_vento_dir', '_345_null', False)
     acc_prev(df_345, 'compare_temp_max', '_345_null', False)
-    acc_prev(df_345, 'compare_temp_min', '_345_null', False)'''
+    acc_prev(df_345, 'compare_temp_min', '_345_null', False)
 
 
 
-    '''for i in range(1, 3):
+    for i in range(1, 3):
         acc_prev_giorno(df_12, 'compare_pioggia', 'id_previsione_giorno', float(i), True)
         acc_prev_giorno(df_12, 'compare_pioggia', 'id_previsione_giorno', float(i), False)
         acc_prev_giorno(df_12, 'compare_vento_vel', 'id_previsione_giorno', float(i), True)
@@ -181,5 +181,6 @@ if __name__ == "__main__":
         acc_prev_giorno(df_345, 'compare_temp_max', 'id_previsione_giorno', float(i), True)
         acc_prev_giorno(df_345, 'compare_temp_max', 'id_previsione_giorno', float(i), False)
         acc_prev_giorno(df_345, 'compare_temp_min', 'id_previsione_giorno', float(i), True)
-        acc_prev_giorno(df_345, 'compare_temp_min', 'id_previsione_giorno', float(i), False)'''
+        acc_prev_giorno(df_345, 'compare_temp_min', 'id_previsione_giorno', float(i), False)
 
+#DONE UNTIL CELLECTION OF 3 LU
