@@ -82,5 +82,4 @@ if __name__ == "__main__":
 
     df_dati_reali_ok.to_csv('csv files/df_dati_reali_ok.csv')
 
-
 # TODO save database into dataframes -> add column fascia oraria to dati_reali, do avg for localita, data, fascia oraria
