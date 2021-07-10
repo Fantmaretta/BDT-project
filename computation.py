@@ -121,7 +121,7 @@ def acc_prev_giorno_loc(df, column, localita_col, localita, id_giorno_prev_col, 
         print(x)
         res.toPandas().to_csv('results_localita/' + localita + giorno + column + '.csv')
     else:
-        x = 'results_localita/NULL_' + localita + giorno + column +  '.csv'
+        x = 'results_localita/NULL_' + localita + giorno + column + '.csv'
         print(x)
         res.toPandas().to_csv('results_localita/NULL_' + localita + giorno + column + '.csv')
 
