@@ -105,4 +105,3 @@ class MySQLDatiRealiManager:
         return dati_reali
 
 dati_reali_manager = MySQLDatiRealiManager()
-# TODO decide hw to structure from xml to  -> ?
