@@ -4,11 +4,13 @@ from typing import List
 
 
 class Vento:
+
     def __init__(self, v: float, d: float):
         self.v = v
         self.d = d
 
 class DatiReali:
+
     def __init__(self, station_code: str, localita: str, data: datetime.date, time: datetime.time, temperatura: float, pioggia: float, vento: Vento):
         self.station_code = station_code
         self.localita = localita
@@ -19,6 +21,8 @@ class DatiReali:
         self.vento = vento
 
     def to_repr(self) -> dict:
+        '''Represent a DatiReali object ad dictionary'''
+
         return {
             "station_code": self.station_code,
             "localita": self.localita,
@@ -32,6 +36,8 @@ class DatiReali:
 
     @staticmethod
     def from_repr(raw_data: dict):
+        '''Represent a dictionary as a DatiReali object'''
+
         return DatiReali(
             raw_data["station_code"],
             raw_data["localita"],
@@ -49,6 +55,8 @@ class DatiReali:
 class MySQLDatiRealiManager:
 
     def __init__(self) -> None:
+        '''Connect to database Mysql'''
+
         self.connection = mysql.connector.connect(
             host="bdtmysql.cvpe8im7hapy.us-east-2.rds.amazonaws.com",
             port=3306,
@@ -59,6 +67,8 @@ class MySQLDatiRealiManager:
         self.connection.autocommit = True
 
     def save(self, dati_reali: List[List[DatiReali]]) -> None:
+        '''Collect real data and save them into the database'''
+
         cursor = self.connection.cursor()
         query = "INSERT into dati_reali (station_code, localita, data, time, temperatura, pioggia, vento_velocita, vento_direzione)" \
                 "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
@@ -82,6 +92,8 @@ class MySQLDatiRealiManager:
         cursor.close()
 
     def list(self) -> List[DatiReali]:
+        '''Given attributes of DatiReali objects, create the objects and save them into a list'''
+
         cursor = self.connection.cursor()
         query = "SELECT station_code, localita, data, time, temperatura, pioggia, velocita_vento, direzione_vento from dati_reali"
         cursor.execute(query)
