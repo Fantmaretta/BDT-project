@@ -11,9 +11,11 @@ os.path.dirname(os.path.abspath(__file__))
 
 
 def create_times_day():
+    '''Create list of time every 15 minutes'''
+
     spacing = 15    # in minutes
     lst = [(datetime.strptime(str(i * timedelta(minutes=spacing)), '%H:%M:%S')).time() for i in range(24 * 60 // spacing)]
-    #print(lst)
+
     return lst
 
 
@@ -21,6 +23,12 @@ class FetchDati:
 
 
     def fetch_single_station(self, url_data: str, station_code_name: (str, str)):
+        '''
+        Given the url for the real data, one tuple of station's code and name, it returns real data for that station
+        :param url_data:
+        :param station_code_name:
+        :return:
+        '''
 
         resp_data = requests.get(url_data + station_code_name[0])
 
@@ -46,8 +54,6 @@ class FetchDati:
         else:
             rain = None
 
-        # TODO NON SI CAPISCE COME USARE TMAX E TMIN, NON CORRISPONDONO ALLE OSSERVAZIONI RIPORTATE SOTTO, MAGARI
-        # TODO POSSIAMO NON USARLE E RICAVARCELE DAI DATI
 
         date_ore_t = []
         temperature = []
@@ -115,14 +121,6 @@ class FetchDati:
 
         #print({'localita': station_code_name[1], 'data_oggi': data_oggi, 'temp_min': temp_min, 'temp_max': temp_max, 'rain': rain, 'data_ora_temp': data_ora_temp, 'data_ora_prec': data_ora_prec, 'data_ora_v_d': data_ora_v_d})
 
-
-        #print("-----------------------------------------------------------------\n")
-
-        # NB PU0' ESSERE CHE NON FACCIA ESATTAMENTE OGNI QUARTO D'ORA !!!!!!!!!!!!!!!
-        # IN PARTICOLARE NEI VENTI, GLI ALTRI DUE INVECE SEMBRANO ESSERE SEMPRE CORRETTI
-        # MA OK TANTO NOI FACCIAMO UNA MEDIA
-        # in alcuni posti possono non esserci delle osservazioni -> eg: borgo valsugana non ha i venti
-
         return {'station_code': station_code_name[0], 'localita': station_code_name[1], 'data_oggi': data_oggi, 'temp_min': temp_min, 'temp_max': temp_max, 'rain': rain, 'data_ora_temp': data_ora_temp, 'data_ora_prec': data_ora_prec, 'data_ora_v_d': data_ora_v_d}
 
 
@@ -136,26 +134,21 @@ class FetchDati:
         '''
 
         list_resp_data = []
-        ''' for station_code_name in list_station_code_name:
-            try:
-                list_resp_data.append(self.fetch_single_station(url_data, station_code_name))
-                break
-            except:
-                print("Connection refused by the server..")
-                print("Let me sleep for 5 seconds")
-                print("ZZzzzz...")
-                time.sleep(5)
-                print("Was a nice sleep, now let me continue...")
-                continue'''
+
         for station_code_name in list_station_code_name:
             list_resp_data.append(self.fetch_single_station(url_data, station_code_name))
             time.sleep(2)
-        #list_resp_data = [self.fetch_single_station(url_data, station_code_name) for station_code_name in list_station_code_name]
 
         return list_resp_data
 
 
     def from_fetch_to_repr_station(self, dict_data, list_time):
+        '''
+        Given the dictionary with the collected data, it transforms it into a list of DatiReali objects with corresponding time
+        :param dict_data:
+        :param list_time:
+        :return:
+        '''
 
         records = {}
         for time in list_time:
@@ -194,6 +187,13 @@ class FetchDati:
 
 
     def from_fetch_to_repr_tot_stations(self, output_fetch_data, list_time):
+        '''
+        Given the output of the fetch data, it applies from_fetch_to_repr_data for each station, returning a list of
+        all the data for all the stations
+        :param output_fetch_data:
+        :param list_time:
+        :return:
+        '''
         return [self.from_fetch_to_repr_station(out, list_time) for out in output_fetch_data]
 
 
