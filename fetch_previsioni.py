@@ -23,11 +23,12 @@ class FetchPrevisioni:
 
     def remove_not_station(self, prediction_json: dict, list_stations):
         '''
-
+        Given the json of predictions, it removes the ones referred to places which are not stations
         :param prediction_json:
         :param list_stations: pickle list of stations names
         :return:
         '''
+
         list_predictions = []
         for pred in prediction_json['previsione']: # prediction_json['previsione'] -> type = list
 
@@ -73,7 +74,14 @@ class FetchPrevisioni:
         return final_predictions_list
 
 
-def get_both(prediction_json: dict, list_stations):
+def get_both(prediction_json: dict, list_stations): # not used
+    '''
+    Check that the selected pleces have a match in stations
+    :param prediction_json:
+    :param list_stations:
+    :return:
+    '''
+
     stations_both = []
     for pred in prediction_json['previsione']:  # prediction_json['previsione'] -> type = list
 
@@ -97,12 +105,6 @@ if __name__ == "__main__":
     list_station_name = pickle.load(file)
     prev_no_stations = fetch_previsioni.remove_not_station(pred, list_station_name)
     #both = get_both(pred, list_station_name)
-
-    f = open("guru99.txt", "w+")
-    for i in range(10):
-        f.write("This is line %d\r\n" % (i + 1))
-        print("ciao ciao ciao")
-    f.close()
 
     print(prev_no_stations)
 
