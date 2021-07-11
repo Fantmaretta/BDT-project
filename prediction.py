@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List
 import mysql.connector
 
+
 class Precipitazioni:
 
     def __init__(self, id_prec_prob: str, desc_prec_prob: str, id_prec_int: str, desc_prec_int: str):
@@ -36,6 +37,8 @@ class Previsione:
         self.vento = vento
 
     def to_repr(self) -> dict:
+        '''Represent a Previsioni object as dictionary'''
+
         return {
             "localita": self.localita,
             "data": self.data,
@@ -59,6 +62,8 @@ class Previsione:
 
     @staticmethod
     def from_repr(raw_pred: dict):
+        '''Represent a dictionary as a Previsioni object'''
+
         return Previsione(
             raw_pred["localita"],
             raw_pred["data"],
@@ -91,6 +96,8 @@ class Previsione:
 class MysqlPrevisioniManager:
 
     def __init__(self) -> None:
+        '''Connect to database Mysql'''
+
         self.connection = mysql.connector.connect(
             host="bdtmysql.cvpe8im7hapy.us-east-2.rds.amazonaws.com",
             port=3306,
@@ -101,6 +108,8 @@ class MysqlPrevisioniManager:
         self.connection.autocommit = True
 
     def save(self, previsioni: List[Previsione]) -> None:
+        '''Collect predictions and save them into the database'''
+
         cursor = self.connection.cursor()
         query = "INSERT into previsioni (localita, data, id_previsione_giorno, temp_min, temp_max, fascia, " \
                 "id_prec_prob, desc_prec_prob, id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, " \
@@ -132,6 +141,8 @@ class MysqlPrevisioniManager:
         cursor.close()
 
     def list(self) -> List[Previsione]:
+        '''Given attributes of Previsioni objects, create the objects and save them into a list'''
+
         cursor = self.connection.cursor()
         query = "SELECT localita, data, id_previsione_giorno, temp_min, temp_max, fascia, id_prec_prob, desc_prec_prob, " \
                 "id_prec_int, desc_prec_int, id_vento_alt, desc_vento_alt, id_vento_dir_alt, desc_vento_dir_alt," \
