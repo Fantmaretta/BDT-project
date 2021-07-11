@@ -37,8 +37,6 @@ if __name__ == "__main__":
     # save into csv
     df_previsioni.toPandas().to_csv('csv files/df_previsioni.csv')
 
-    #df_previsioni.rdd.saveAsPickleFile('pickle/df_previsioni.pickle')
-
 
     # retrieve dati_reali
 
@@ -52,7 +50,7 @@ if __name__ == "__main__":
         .option("driver", 'com.mysql.cj.jdbc.Driver') \
         .option("query", query_dati_reali)\
         .load()
-    #df_dati_reali.show()
+    df_dati_reali.show()
 
     # keep only observations with 0-5 type of days
     df_dati_reali = df_dati_reali.filter(df_dati_reali.data >= "2021-05-07")
@@ -81,5 +79,3 @@ if __name__ == "__main__":
             df_dati_reali_ok['fascia'][index] = '18-24'
 
     df_dati_reali_ok.to_csv('csv files/df_dati_reali_ok.csv')
-
-# TODO save database into dataframes -> add column fascia oraria to dati_reali, do avg for localita, data, fascia oraria
