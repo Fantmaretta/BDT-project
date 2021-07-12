@@ -17,13 +17,14 @@ class StationAnagrafica:
         :param file_station_name:
         :return:
         '''
+
         # file_station_name = 'stations.xml'
 
         # url stations anagrafica
         #url_stations_anagrafica = "http://dati.meteotrentino.it/service.asmx/listaStazioni"
+
         # request get
         resp_stat = requests.get(url_stations_anagrafica)
-        #print(resp_stat.content)
 
         # create xml file
         with open(file_station_name, 'wb') as f:
