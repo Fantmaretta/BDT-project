@@ -1,7 +1,13 @@
 from pyspark import SparkContext, SparkConf, SQLContext
 
 
+
+# file to write elaborated data (df_12, df_345 with accuracies computed for days 1 2 or 3 4 5)  on two new tables in the database
+
+
 if __name__ == "__main__":
+
+    # connection
     appName = "PySpark SQL write - via JDBC"
     master = "local[*]"
     conf = SparkConf() \
@@ -12,6 +18,7 @@ if __name__ == "__main__":
     sqlContext = SQLContext(sc)
     spark = sqlContext.sparkSession
 
+    # set configuration
     database = "bdt_db_mysql"
     src_table = "results_12"
     user = "root_bdt"
@@ -19,21 +26,11 @@ if __name__ == "__main__":
     dbtable_12 = "results_12"
     dbtable_345 = "results_345"
 
-
     jdbcUrl = "jdbc:mysql://bdtmysql.cvpe8im7hapy.us-east-2.rds.amazonaws.com:3306/bdt_db_mysql"
     jdbcDriver = "com.mysql.cj.jdbc.Driver"
-    # Create a data frame by reading data from SQL Server via JDBC
-    jdbcDF = spark.read.format("jdbc") \
-        .option("url", jdbcUrl) \
-        .option("dbtable", dbtable_345) \
-        .option("user", user) \
-        .option("password", password) \
-        .option("driver", jdbcDriver) \
-        .load()
-
-    jdbcDF.show()
 
 
+    # save df_12 into table dbtable_12 in the database
     df_12 = spark.read.csv('csv files/accuracy_12.csv', header=True, sep=",")
     df_12.show()
 
@@ -46,6 +43,8 @@ if __name__ == "__main__":
       .save()
 
 
+    # save df_345 into table dbtable_345 in the database
+
     df_345 = spark.read.csv('csv files/accuracy_345.csv', header=True, sep=",")
     df_345.show()
 
@@ -57,3 +56,15 @@ if __name__ == "__main__":
       .option("password", password) \
       .save()
 
+
+
+    '''# Create a data frame by reading data from SQL Server via JDBC
+    jdbcDF = spark.read.format("jdbc") \
+        .option("url", jdbcUrl) \
+        .option("dbtable", dbtable_345) \
+        .option("user", user) \
+        .option("password", password) \
+        .option("driver", jdbcDriver) \
+        .load()
+
+    jdbcDF.show()'''
