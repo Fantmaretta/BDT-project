@@ -1,9 +1,5 @@
 from pyspark.sql import SparkSession
 
-# todo from 2021-05-08 to 2021-20-06 ?
-# todo 11 e 14 giugno hanno meno cose!! perché con ala almeno
-# come gestire queste cose
-# todo issue to put in the report
 
 # read csv file into dataframe pyspark
 
