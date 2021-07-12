@@ -1,9 +1,5 @@
-import pandas as pd
-import numpy as np
 import requests
 import xml.etree.cElementTree as ET
-from xml.parsers import expat
-from lxml import etree
 import pickle
 import re
 
