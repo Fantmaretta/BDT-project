@@ -2,6 +2,8 @@ from modify_previsioni import *
 from modify_dati_reali import *
 
 
+# creation of final dataframes (so database tables) with computed accuracies
+
 if __name__ == "__main__":
 
     df_previsioni = initialize_df_p("csv files/df_previsioni.csv")
@@ -49,10 +51,6 @@ if __name__ == "__main__":
     df_12 = df_12_d.join(df_12_p, ['localita', 'data', 'fascia'])
     df_345 = df_345_d.join(df_345_p, ['localita', 'data', 'fascia_extended'])
 
-    # TODO y / n
-    # TODO probabilita prec ???
-    # TODO ec2 / docker
-    # TODO report inizio
 
     columns_drop = ['desc_prec_prob', 'desc_prec_int', 'id_vento_alt', 'desc_vento_alt', 'id_vento_dir_alt', \
                     'desc_vento_dir_alt', 'desc_vento_val', 'desc_vento_dir_val']
