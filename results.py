@@ -35,7 +35,7 @@ parser.add_argument('-localita',
                     help='locality for accuracy')
 parser.add_argument('-days',
                     type=str,
-                    default='12',
+                    default='1-2',
                     help='accuracy on following day 1-2 or 3-4-5')
 parser.add_argument('-type',
                     type=int,
@@ -45,7 +45,7 @@ parser.add_argument('-type',
 args = parser.parse_args()
 
 
-if args.days == '12':
+if args.days == '1-2':
     query = """SELECT * FROM bdt_db_mysql.results_12 WHERE localita = '{}'""".format(args.localita)
 else:
     query = """SELECT * FROM bdt_db_mysql.results_345 WHERE localita = '{}'""".format(args.localita)
