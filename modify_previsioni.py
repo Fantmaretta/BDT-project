@@ -8,6 +8,11 @@ from pyspark.sql import SparkSession
 # read csv file into dataframe pyspark
 
 def initialize_df_p(df_path):
+    '''
+    Given the df of prediction data it modifies it to make it suitable for following analysis
+    :param df_path:
+    :return:
+    '''
 
     spark = SparkSession \
         .builder \
@@ -18,17 +23,16 @@ def initialize_df_p(df_path):
     df_previsioni = spark.read.csv(df_path, header=True, sep=",")
     df_previsioni = df_previsioni.orderBy('localita', 'data', 'id_previsione_giorno')
 
-    #find_prec_udf = udf(find_prec, StringType())
-    #df_previsioni = df_previsioni.withColumn('precipitazioni', find_prec_udf(df_previsioni.id_prec_int))
-
-    #find_vento_udf = udf(find_vento, StringType())
-    #df_previsioni = df_previsioni.withColumn('intensita_vento', find_vento_udf(df_previsioni.id_vento_val))
-
     df_previsioni.show()
 
     return df_previsioni
 
 def df_12_p(df_previsioni):
+    '''
+    Given the df of prediction data, it extracts only the observations of day 1 2
+    :param df_previsioni:
+    :return:
+    '''
 
     # create df with only 1 2 giorni
     df_previsioni_12 = df_previsioni.filter(df_previsioni['id_previsione_giorno'] != 3)\
@@ -43,6 +47,11 @@ def df_12_p(df_previsioni):
     return df_previsioni_12
 
 def df_345_p(df_previsioni):
+    '''
+    Given the df of prediction data, it extracts only the observations of day 3 4 5
+    :param df_previsioni:
+    :return:
+    '''
 
     # create df with only 3 4 5 giorni
     df_previsioni_345 = df_previsioni.filter(df_previsioni['id_previsione_giorno'] != 0)\
