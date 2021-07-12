@@ -1,0 +1,261 @@
+---
+title: "plots bdt"
+output: html_document
+---
+
+```{r}
+df <- read.csv("/home/veror/Downloads/data_plots/compare_pioggia.csv")
+
+df$avg.compare_pioggia.[is.na(df$avg.compare_pioggia.)] <- round(mean(df$avg.compare_pioggia., na.rm = TRUE))
+df$avg.compare_pioggia. <- round(df$avg.compare_pioggia., digits = 0)
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 1)] <- "inaccurate"
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 2)] <- "medium"
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 3)] <- "high"
+
+length(df$compare_pioggia)
+na <- which(is.na(df$compare_pioggia))
+x <- which(df$compare_pioggia == 3)
+y <- which(df$compare_pioggia == 2)
+z <- which(df$compare_pioggia == 1)
+length(na)
+length(x)
+length(y)
+length(z)
+
+View(df)
+```
+
+```{r}
+df1 <- read.csv("/home/veror/Downloads/data_plots/compare_vento_vel.csv")
+summary(df1)
+df1$avg.compare_vento_vel.[is.na(df1$avg.compare_vento_vel.)] <- round(mean(df1$avg.compare_vento_vel., na.rm = TRUE))
+df1$avg.compare_vento_vel. <- round(df1$avg.compare_vento_vel., digits = 0)
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 1)] <- "inaccurate"
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 2)] <- "medium"
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 3)] <- "high"
+
+View(df1)
+
+df1$avg.compare_vento_vel.
+```
+
+```{r}
+df2 <- read.csv("/home/veror/Downloads/data_plots/compare_vento_dir.csv")
+
+df2$avg.compare_vento_dir.[is.na(df2$avg.compare_vento_dir.)] <- round(mean(df2$avg.compare_vento_dir., na.rm = TRUE))
+df2$avg.compare_vento_dir. <- round(df2$avg.compare_vento_dir., digits = 0)
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 1)] <- "inaccurate"
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 2)] <- "medium"
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 3)] <- "high"
+
+View(df2)
+
+df2$avg.compare_vento_dir.
+```
+
+```{r}
+df3 <- read.csv("/home/veror/Downloads/data_plots/compare_temp_min.csv")
+
+df3$avg.compare_temp_min.[is.na(df3$avg.compare_temp_min.)] <- round(mean(df3$avg.compare_temp_min., na.rm = TRUE))
+df3$avg.compare_temp_min. <- round(df3$avg.compare_temp_min., digits = 0)
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 1)] <- "inaccurate"
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 2)] <- "medium"
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 3)] <- "high"
+
+View(df3)
+
+df3$avg.compare_temp_min.
+```
+
+```{r}
+df4 <- read.csv("/home/veror/Downloads/data_plots/compare_temp_max.csv")
+
+df4$avg.compare_temp_max.[is.na(df4$avg.compare_temp_max.)] <- round(mean(df4$avg.compare_temp_max., na.rm = TRUE))
+df4$avg.compare_temp_max. <- round(df4$avg.compare_temp_max., digits = 0)
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 1)] <- "inaccurate"
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 2)] <- "medium"
+#df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 3)] <- "high"
+
+View(df4)
+
+df4$avg.compare_temp_max. 
+
+```
+
+```{r}
+df <- read.csv("/home/veror/Desktop/Uni/Bid Data Technology/R BDT project/accuracy_12.csv")
+View(df)
+
+sum(is.na(df$compare_pioggia))
+sum(is.na(df$compare_vento_vel))
+sum(is.na(df$compare_vento_dir))
+sum(is.na(df$compare_temp_max))
+sum(is.na(df$compare_temp_min))
+
+sum(is.na(df$avg.temperatura.))
+sum(is.na(df$avg.pioggia.))
+sum(is.na(df$avg.vento_velocita.))
+sum(is.na(df$avg.vento_direzione.))
+sum(is.na(df$min.temperatura.))
+sum(is.na(df$max.temperatura.))
+
+sum(df$compare_pioggia == 3.0)
+```
+
+```{r}
+lm_rain_intensity <- lm(avg.pioggia. ~ avg.temperatura. + min.temperatura. + max.temperatura., data = df)
+lm_rain_accuracy <-  lm(compare_pioggia ~ avg.temperatura. + min.temperatura. + max.temperatura., data = df) 
+
+new_d <- data.frame(c(23), c(18), c(30))
+names(new_d) <- c("avg.temperatura.", "min.temperatura.", "max.temperatura.")
+
+
+df_new <- df
+df_new <- df_new[which(!is.na(df_new$temp_max)), ]
+df_new <- df_new[which(!is.na(df_new$temp_min)), ]
+df_new <- df_new[which(!is.na(df_new$id_prec_prob)), ]
+df_new <- df_new[which(!is.na(df_new$id_prec_int)), ]
+df_new <- df_new[which(df_new$id_prec_prob != -1), ]
+df_new <- df_new[which(df_new$id_prec_int != -1), ]
+
+df_new <- df_new[which(!is.na(df_new$avg.pioggia.)), ]
+df_new <- df_new[which(!is.na(df_new$compare_pioggia)), ]
+
+View(df_new)
+
+
+# MODEL: 
+# 1) LINEAR REGRESSION TO PREDICT PIOGGIA (real data col) FROM TEMP_MIN, TEMP_MAX, ID_PRE_PROB (prediction col)
+# 2) ? TO PREDICT ACCURACY OF RAIN PREDICTION FROM TEMP_MIN, TEMP_MAX, ID_PRE_PROB (prediction col)
+# ??? -> mettere as.factor oppure no ?
+lm_rain_intensity <- lm(avg.pioggia. ~ temp_min + temp_max + id_prec_prob, data = df_new)
+lm_rain_accuracy <-  lm(compare_pioggia ~ temp_min + temp_max + as.factor(id_prec_prob), data = df_new) 
+lm_rain_probability <- lm(id_prec_prob ~ temp_min + temp_max + as.factor(id_prec_int), data = df_new)
+
+summary(lm_rain_intensity)
+summary(lm_rain_accuracy)
+summary(lm_rain_probability)
+
+new_d <- data.frame(c(23), c(18), c(3))
+names(new_d) <- c("temp_min", "temp_max", "id_prec_int")
+
+pred_int <- predict(lm_rain_intensity, newdata = new_d)
+pred_int
+
+pred_acc <- round(predict(lm_rain_accuracy, newdata = new_d))
+pred_acc
+
+pred_ <- predict(lm_rain_intensity, newdata = new_d)
+pred_int
+```
+
+
+
+```{r}
+# MODEL NO PREDICTION ABOUT INTENSITY
+
+df <- read.csv("/home/veror/Desktop/Uni/Bid Data Technology/R BDT project/accuracy_12.csv")
+View(df)
+
+sub_df <- na.omit(df[, c(6, 15:17, 19)])
+View(sub_df)
+
+df_fin <- sub_df[which(sub_df$id_prec_prob != -1), ]
+#df_fin <- sub_df[which(sub_df$id_prec_int != -1), ]
+View(df_fin)
+
+for (i in 4:5) {
+  df_fin[, i] <- as.factor(df_fin[, i])
+}
+
+summary(df_fin)
+```
+
+
+
+```{r}
+# MODEL WITH PREDICTION ABOUT INTENSITY
+
+df <- read.csv("/home/veror/Desktop/Uni/Bid Data Technology/R BDT project/accuracy_12.csv")
+View(df)
+
+sub_df <- na.omit(df[, c(4, 6, 15:19)])
+View(sub_df)
+
+df_fin <- sub_df[which(sub_df$id_prec_prob != -1), ]
+df_fin <- sub_df[which(sub_df$id_prec_int != -1), ]
+View(df_fin)
+
+df_fin$fascia <- as.factor(df_fin$fascia)
+for (i in 5:7) {
+  df_fin[, i] <- as.factor(df_fin[, i])
+}
+unique(df_fin$id_prec_int)
+summary(df_fin)
+```
+
+```{r}
+lm_avg_pioggia <- lm(avg.pioggia. ~ ., data = df_fin)
+summary(lm_avg_pioggia)
+```
+
+
+```{r}
+df <- read.csv("/home/veror/Desktop/Uni/Bid Data Technology/R BDT project/accuracy_345.csv")
+View(df)
+
+sub_df <- na.omit(df[, c(6, 14:19)])
+View(sub_df)
+
+df_fin <- sub_df[which(sub_df$id_prec_prob != -1), ]
+df_fin <- sub_df[which(sub_df$id_prec_int != -1), ]
+View(df_fin)
+
+df_fin$id_previsione_giorno <- as.factor(df_fin$id_previsione_giorno)
+for (i in 5:7) {
+  df_fin[, i] <- as.factor(df_fin[, i])
+}
+
+df_fin <- df_fin[, -6]
+summary(df_fin)
+```
+
+```{r}
+lm_avg_pioggia <- lm(avg.avg.pioggia.. ~ ., data = df_fin)
+summary(lm_avg_pioggia)
+```
+
+
+
+
+
+
+```{r}
+library(randomForest)
+
+df <- read.csv("/home/veror/Desktop/Uni/Bid Data Technology/R BDT project/accuracy_12.csv")
+View(df)
+df$id_prec_prob <- as.factor(df$id_prec_prob)
+df$id_prec_int <- as.factor(df$id_prec_prob)
+df$id_previsione_giorno <- as.factor(df$id_)
+
+
+
+# bagging
+set.seed(1)
+# set number of predictors (all)
+n_pred <- 3
+# bagging on the training portion of hit
+bag <- randomForest(id_prec_prob ~ id_prec_int + temp_max + temp_min, data = df, mtry=n_pred, importance=TRUE)
+bag
+#hit_bag$importance # predictors importance
+# plot importance
+varImpPlot(bag)
+```
+
+
+
+
+
+
+
