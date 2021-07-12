@@ -2,12 +2,14 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf
 from pyspark.sql.types import StringType
 
-# todo from 05-05 to 20-06 ?
-
-# read csv file into dataframe pyspark
-
+# from 07-05 to 02-07
 
 def initialize_df_d(df_path):
+    '''
+    Given the df of real data it modifies it to make it suitable for following analysis
+    :param df_path:
+    :return:
+    '''
 
     spark = SparkSession \
         .builder \
@@ -28,20 +30,51 @@ def initialize_df_d(df_path):
 
     return(df_dati)
 
-    # drop rows with temperature = null -> not necessary since wgen doing avg it does it by itself
-    #df_dati = df_dati.na.drop(subset=["temperatura"])
 
 def compute_avg(df, l, d, f, var): # on fascia
+    '''
+    It computes the avg (on the single fascia oraria) on one column of the df, grouped by l, d, f
+    :param df:
+    :param l: localita
+    :param d: data
+    :param f: fascia oraria
+    :param var: selected value
+    :return:
+    '''
+
     return df.groupBy(l, d, f).avg(var).orderBy(d, l, f)
 
 def compute_min(df, l, d, var): # on total day, not fascia
+    '''
+    Ir computes the min (on total day) on one column of the df, grouped by l, d
+    :param df:
+    :param l: localita
+    :param d: data
+    :param var: selected value
+    :return:
+    '''
+
     return df.groupBy(l, d).min(var).orderBy(d, l)
 
 def compute_max(df, l, d, var): # on total day, not fascia
+    '''
+    Ir computes the max (on total day) on one column of the df, grouped by l, d
+    :param df:
+    :param l: localita
+    :param d: data
+    :param var: selected value
+    :return:
+    '''
+
     return df.groupBy(l, d).max(var).orderBy(d, l)
 
 
 def df_12(df_dati):
+    '''
+    Given the df of real data, it computes the avg, min, max, returning a final df for days 1 2
+    :param df_dati:
+    :return:
+    '''
 
     # df containing localita, data, fascia, avg temperatura
     d_avg_temp = compute_avg(df_dati, 'localita', 'data', 'fascia', 'temperatura')
@@ -79,14 +112,24 @@ def df_12(df_dati):
     return joined_df
 
 
-# define fascia to match with previsioni on day 3 4 5
 def find_fascia(x):
+    '''
+    It defines fascia to match with previsioni on day 3 4 5
+    :param x:
+    :return:
+    '''
+
     if x == '00-06' or x == '06-12':
         return '00-12'
     else:
         return '12-24'
 
 def df_345(joined_df):
+    '''
+    Given the df of real data on days 1 2, it computes the avg, min, max, returning a final df for days 3 4 5
+    :param df_dati:
+    :return:
+    '''
 
     find_fascia_udf = udf(find_fascia, StringType())
     joined_df_extension = joined_df.withColumn('fascia_extended', find_fascia_udf(joined_df.fascia))
@@ -129,20 +172,32 @@ def df_345(joined_df):
 
 
 def find_prec_int(x):
-        if x == None:
-            return None
-        elif x >= 0 and x < 5:
-            return '1'
-        elif x >= 5 and x < 15:
-            return '2'
-        elif x >= 15 and x <= 40:
-            return '3'
-        elif x >= 40:
-            return '4'
-        else:
-            return None
+    '''
+    Given a range in which the prediction for rain is, it returns the corresponding index
+    :param x:
+    :return:
+    '''
+
+    if x == None:
+        return None
+    elif x >= 0 and x < 5:
+        return '1'
+    elif x >= 5 and x < 15:
+        return '2'
+    elif x >= 15 and x <= 40:
+        return '3'
+    elif x >= 40:
+        return '4'
+    else:
+        return None
 
 def find_vento_dir(x):
+    '''
+    Given the range in which the prediction for wind direction is, it returns the corresponding index
+    :param x:
+    :return:
+    '''
+
     if x == None:
         return None
     elif x >= 348.76 or x <= 11.25:
@@ -181,6 +236,12 @@ def find_vento_dir(x):
         return None
 
 def find_vento_int(x):
+    '''
+    Given the range in which the prediction for wind intensity is, it returns the corresponding index
+    :param x:
+    :return:
+    '''
+
     if x == None:
         return None
     elif x >= 0 and x < 0.5:
@@ -195,4 +256,3 @@ def find_vento_int(x):
         return '5'
     else:
         return None
-
