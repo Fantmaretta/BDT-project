@@ -2,8 +2,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf
 from pyspark.sql.types import FloatType, StringType
 import pyspark.sql.functions as F
-from pyspark.sql.functions import round, col
-from pyspark.ml.feature import Imputer
+from pyspark.sql.functions import col
 
 
 # file to compute statistics and save them
