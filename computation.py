@@ -6,7 +6,15 @@ from pyspark.sql.functions import round, col
 from pyspark.ml.feature import Imputer
 
 
+# file to compute statistics and save them
+
+
 def from_csv(csv_path):
+    '''
+    Given a csv it returns a pyspark dataframe
+    :param csv_path:
+    :return:
+    '''
 
     spark = SparkSession \
         .builder \
@@ -17,14 +25,20 @@ def from_csv(csv_path):
 
     df = spark.read.csv(csv_path, header=True, sep=",")
 
-    #df = df.select(df.columns[3:]).cast('float')
-
     for col in df.columns[4:]:
         df = df.withColumn(col, df[col].cast(FloatType()))
 
     return df
 
+
 def def_accuracy_range(index_1, index_2):
+    '''
+    Given the index of real data and the one of prediction, it returns the accuracy of the prediction (1 2 3)
+    :param index_1:
+    :param index_2:
+    :return:
+    '''
+
     if (index_1 == None or index_2 == None or index_1 == -1 or index_2 == -1):
         return None
     if (index_2 == (index_1 + 1) or index_2 == (index_1 - 1)):
@@ -35,6 +49,13 @@ def def_accuracy_range(index_1, index_2):
         return 1 #'inaccurate'
 
 def def_accuracy_range_temp(index_1, index_2):
+    '''
+    Given the real and predicted temprature, it returns the accuracy of the prediction (1 2 3)
+    :param index_1:
+    :param index_2:
+    :return:
+    '''
+
     if (index_1 == None or index_2 == None or index_1 == -1 or index_2 == -1):
         return None
     if (index_2 <= (index_1 + 1) and index_2 >= (index_1 - 1)):
@@ -46,10 +67,28 @@ def def_accuracy_range_temp(index_1, index_2):
 
 
 def correspondance_dati_prev(df, c1, c2, c_name):
+    '''
+    Given 2 columns, it compare them to get the accuracy between predictions and real data
+    :param df:
+    :param c1:
+    :param c2:
+    :param c_name:
+    :return:
+    '''
+
     def_accuracy_range_udf = udf(def_accuracy_range, StringType())
     return df.withColumn(c_name, def_accuracy_range_udf(c1, c2).cast('int'))
 
 def correspondance_dati_prev_temp(df, c1, c2, c_name):
+    '''
+    Given 2 columns, it compare them to get the accuracy between predictions and real data for tmeperature
+    :param df:
+    :param c1:
+    :param c2:
+    :param c_name:
+    :return:
+    '''
+
     def_accuracy_range_temp_udf = udf(def_accuracy_range_temp, StringType())
     return df.withColumn(c_name, def_accuracy_range_temp_udf(c1, c2).cast('int'))
 
@@ -57,7 +96,16 @@ def correspondance_dati_prev_temp(df, c1, c2, c_name):
     return df.withColumn(c_name, F.when(((col(c1) == col(c2)) & (col(c1).isNotNull()) & (col(c2).isNotNull())), 'Y').\
                          when(((col(c1) != col(c2)) & (col(c1).isNull()) & (col(c2).isNull())), 'Y').otherwise('N'))'''
 
+
 def acc_prev(df, column, df_name, exclude_null):
+    '''
+    It computes the accuracy for one particular measure, so saves the computed accuracies with all the data in a csv file
+    :param df:
+    :param column:
+    :param df_name:
+    :param exclude_null:
+    :return:
+    '''
 
     if exclude_null:
         df = df.na.drop(subset=[column])
@@ -75,6 +123,16 @@ def acc_prev(df, column, df_name, exclude_null):
     return res
 
 def acc_prev_giorno(df, column, id_giorno_prev_col, id_giorno_prev, exclude_null):
+    '''
+    It computes the accuracy for one particular measure for a particular day (1 2 3 4 5), so saves the computed accuracies
+    with all the data in a csv file
+    :param df:
+    :param column:
+    :param id_giorno_prev_col:
+    :param id_giorno_prev:
+    :param exclude_null:
+    :return:
+    '''
 
     if exclude_null:
         df = df.na.drop(subset=[column])
@@ -101,13 +159,26 @@ def acc_prev_giorno(df, column, id_giorno_prev_col, id_giorno_prev, exclude_null
     return res
 
 def acc_prev_giorno_loc(df, column, localita_col, localita, id_giorno_prev_col, id_giorno_prev, giorno, exclude_null):
+    '''
+    It computes the accuracy for one particular measure for a particular day (1 2 3 4 5) for one particular station,
+    so saves the computed accuracies with all the data in a csv file
+    :param df:
+    :param column:
+    :param localita_col:
+    :param localita:
+    :param id_giorno_prev_col:
+    :param id_giorno_prev:
+    :param giorno:
+    :param exclude_null:
+    :return:
+    '''
 
     if exclude_null:
         df = df.na.drop(subset=[column])
-    #df.show()
+
     df = df.where(col(id_giorno_prev_col) == id_giorno_prev)
     df = df.where(col(localita_col) == localita)
-    print("----")
+
     df.show()
 
     total = df.count()
@@ -127,26 +198,23 @@ def acc_prev_giorno_loc(df, column, localita_col, localita, id_giorno_prev_col, 
 
     return res
 
-# todo on sigle station -> just select rows with column = localita --> compute by using functions in the main below here
-#
 
 def avg_by_date(df, el, giorni):
+    '''
+    It computes the avg accuracy for a particular measure for each observed day (from may to july), so saves results into
+    csv file
+    :param df:
+    :param el:
+    :param giorni:
+    :return:
+    '''
+
     df = df.groupBy('data').avg(el).orderBy('data')  # .orderBy(d, l, f)
     #df = df.select("*", round(col('avg(' + el + ')')))
     df.show()
     df.toPandas().to_csv('data_plots/' + el + '_' + giorni + '.csv')
 
     return df
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -158,8 +226,6 @@ if __name__ == "__main__":
     df_12_acc = from_csv('csv files/accuracy_12.csv')
     df_345_acc = from_csv('csv files/accuracy_345.csv')
     x = df_12_acc.select('localita').distinct().show()
-
-
 
 
     '''def_accuracy_range_udf = udf(def_accuracy_range, StringType())
