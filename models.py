@@ -136,7 +136,7 @@ if __name__ == "__main__":
     df_spark = mod.get_df_spark()
     df = mod.prepare_df(df_spark)
     # fit the model
-    regr = mod.regr_dummies(df, 'models/regr_model_dummies.sav')
+    regr = mod.regr_dummies(df, 'models/regr_model_dummies.sav', 'models/coeff.pickle')
 
 
 
