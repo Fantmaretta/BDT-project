@@ -2,7 +2,6 @@ from models import Model
 import pyspark.sql.functions as F
 from pyspark.sql import SparkSession
 import argparse
-import pickle
 
 
 def acc_prev(df, columns, localita):
