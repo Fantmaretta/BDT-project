@@ -3,6 +3,9 @@ from pyspark.sql.functions import udf
 from pyspark.sql.types import FloatType, StringType
 import pyspark.sql.functions as F
 from pyspark.sql.functions import col
+import os
+import pandas as pd
+
 
 
 # file to compute statistics and save them
@@ -216,6 +219,45 @@ def avg_by_date(df, el, giorni):
     return df
 
 
+def read_files(directory):
+
+    i = 0
+    index_list = -1
+    list_stations = ['ala', 'aldeno', 'arco', 'canazei', 'castello tesino', 'cavalese', 'cles', 'daone', 'grigno', 'levico',
+                     'mezzano', 'mezzolombardo', 'moena', 'passo pian delle fugazze', 'peio', 'pergine valsugana', 'pinzolo',
+                     'predazzo', 'rabbi', 'rovereto', 'san lorenzo in banale', 'torbole', 'trento']
+
+    d = {'localita': [], 'measure': [], 'accuracy': [], 'count': [], 'tot': [], 'fraction': []}
+    df_fin = pd.DataFrame(data=d)
+
+    list_dir = os.listdir(directory)
+    list_dir = [f.lower() for f in list_dir]  # Convert to lower case
+    files = sorted(list_dir)
+
+    for filename in files:
+
+        if i % 5 == 0:
+            index_list += 1
+
+
+        df = pd.read_csv('results_localita/' + filename, sep=',')
+
+        for index, row in df.iterrows():
+            #print(row[df.columns[2]])
+            #print(index_list)
+            #print(len(list_stations))
+            new_row = {'localita': list_stations[index_list], 'measure': df.columns[1], 'accuracy': row[df.columns[1]],
+                           'count': row[df.columns[2]], 'tot': row[df.columns[3]], 'fraction': row[df.columns[4]]}
+            #print("sssssssssssss")
+            #print(new_row)
+            df_fin = df_fin.append(new_row, ignore_index=True)
+            #print(df_fin)
+
+        i += 1
+
+    df_fin.to_csv('results/res_final_loc.csv', )
+
+
 
 if __name__ == "__main__":
 
@@ -338,4 +380,6 @@ if __name__ == "__main__":
 
     for i in range(0, 5):
         acc_prev_giorno_loc(df_345_acc, elements[i], 'localita', 'trento', 'id_previsione_giorno',  1, '345', True)
+
+    read_files('results_localita')
 
