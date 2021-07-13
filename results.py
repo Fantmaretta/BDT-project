@@ -2,7 +2,6 @@ from models import Model
 import pyspark.sql.functions as F
 from pyspark.sql import SparkSession
 import argparse
-import pickle
 
 
 # todo decide what to return
@@ -157,8 +156,8 @@ if __name__ == "__main__":
         print("The predicted quantity of rain is:",
               mod.regr_dummies_pred('models/regr_model_dummies.sav', X))
 
-        coeff = pickle.load(open('models/coeff.pickle', 'rb'))
-        print(coeff)
+        #coeff = pickle.load(open('models/coeff.pickle', 'rb'))
+        #print(coeff)
 
     else:
 
