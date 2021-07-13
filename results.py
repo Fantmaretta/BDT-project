@@ -2,9 +2,9 @@ from models import Model
 import pyspark.sql.functions as F
 from pyspark.sql import SparkSession
 import argparse
+import pickle
 
 
-# todo decide what to return
 def acc_prev(df, columns, localita):
     '''
     Given the df containing the comparisons between observations and predictions, it returns the total accuracy for one
@@ -26,7 +26,6 @@ def acc_prev(df, columns, localita):
 
         res.show()
 
-    #return res
 
 
 if __name__ == "__main__":
@@ -157,8 +156,6 @@ if __name__ == "__main__":
               mod.regr_dummies_pred('models/regr_model_dummies.sav', X))
 
 
-        #coeff = pickle.load(open('models/coeff.pickle', 'rb'))
-        #print(coeff)
 
     else:
 
