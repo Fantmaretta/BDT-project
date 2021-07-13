@@ -7,14 +7,14 @@ import pickle
 
 # todo decide what to return
 def acc_prev(df, columns, localita): # df_12/df_345 , compare_pioggia..., localita, nome_loc -> columns is a list of columns
-
-    '''if localita == "total": # todo maybe delete this one
-        total = df.count()
-        res = (df.groupBy(column).count()
-                          .withColumn('total', F.lit(total))
-                          .withColumn('fraction', F.expr('count/total')))'''
-    #df1 = df.where(col(localita_col) == localita)
-    #df1.show()
+    '''
+    Given the df containing the comparisons between observations and predictions, it returns the total accuracy for one
+    / more types of measures for one stetion
+    :param df:
+    :param columns:
+    :param localita:
+    :return:
+    '''
 
     print("The accuracy's fractions for the locality of \"" + localita + "\" follows, with 1.0 = inaccurate, 2.0 = medium accuracy, 3.0 = high accuracy")
 
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     else:
 
         if args.days == '1-2':
-            query = """SELECT * FROM bdt_db_mysql.results_12 WHERE localita = '{}'""".format(args.localita)
+            query = """SELECT compare_pioggia, compare_vento_vel, compare_vento_dir, compare_temp_max, compare_temp_min FROM bdt_db_mysql.results_12 WHERE localita = '{}'""".format(args.localita)
         else:
             query = """SELECT * FROM bdt_db_mysql.results_345 WHERE localita = '{}'""".format(args.localita)
 
