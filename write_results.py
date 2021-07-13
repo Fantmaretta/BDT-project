@@ -20,11 +20,11 @@ if __name__ == "__main__":
 
     # set configuration
     database = "bdt_db_mysql"
-    src_table = "results_12"
     user = "root_bdt"
     password  = "bdt_mysql"
     dbtable_12 = "results_12"
     dbtable_345 = "results_345"
+    dbtable_fin_loc = "results_fin_loc"
 
     jdbcUrl = "jdbc:mysql://bdtmysql.cvpe8im7hapy.us-east-2.rds.amazonaws.com:3306/bdt_db_mysql"
     jdbcDriver = "com.mysql.cj.jdbc.Driver"
@@ -55,6 +55,21 @@ if __name__ == "__main__":
       .option("user", user) \
       .option("password", password) \
       .save()
+
+
+
+    # save df with final results on localities into table dbtable_fin_loc in the database
+
+    df_loc = spark.read.csv('csv files/res_final_loc.csv', header=True, sep=",")
+    df_loc.show()
+
+    df_loc.select("*").write.format("jdbc") \
+        .mode("overwrite") \
+        .option("url", jdbcUrl) \
+        .option("dbtable", dbtable_fin_loc) \
+        .option("user", user) \
+        .option("password", password) \
+        .save()
 
 
 
