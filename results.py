@@ -156,6 +156,7 @@ if __name__ == "__main__":
         print("The predicted quantity of rain is:",
               mod.regr_dummies_pred('models/regr_model_dummies.sav', X))
 
+
         #coeff = pickle.load(open('models/coeff.pickle', 'rb'))
         #print(coeff)
 
