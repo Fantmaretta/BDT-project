@@ -6,7 +6,7 @@ import pickle
 
 
 # todo decide what to return
-def acc_prev(df, columns, localita): # df_12/df_345 , compare_pioggia..., localita, nome_loc -> columns is a list of columns
+def acc_prev(df, columns, localita):
     '''
     Given the df containing the comparisons between observations and predictions, it returns the total accuracy for one
     / more types of measures for one stetion
