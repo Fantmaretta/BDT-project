@@ -1,91 +1,151 @@
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-import numpy as np
-from filter_evaluation import *
+import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from pyspark.sql import SparkSession
+import pickle
+
+
+class Model:
+
+
+    def get_df_spark(self):
+        '''
+        It connect to database, retrieve the table and convert it into pandas df
+        :return:
+        '''
+
+        sparkConnector = SparkSession.builder.appName("Connector_to_MySQL_BDT") \
+            .config("spark.driver.extraClassPath",
+                    "JDBC_connector/mysql-connector-java-8.0.25.jar") \
+            .master('local[*]') \
+            .enableHiveSupport() \
+            .getOrCreate()
+
+        query = """SELECT * FROM bdt_db_mysql.results_12"""
+
+        df = sparkConnector.read \
+            .format("jdbc") \
+            .option("url", "jdbc:mysql://bdtmysql.cvpe8im7hapy.us-east-2.rds.amazonaws.com:3306") \
+            .option("user", "root_bdt") \
+            .option("password", "bdt_mysql") \
+            .option("driver", 'com.mysql.cj.jdbc.Driver') \
+            .option("query", query) \
+            .load()
+        # .option("dbtable", "bdt_db_mysql.dati_reali")
+        df.show()
+
+        pandasDF = df.toPandas()
+
+        return pandasDF
+
+
+    def prepare_df(self, dataset): # df_path -> 'csv files/accuracy_12.csv'
+        '''
+        Given the df, it selects the needed columns and removes NaN/incorrect valus
+        :param df_path:
+        :return:
+        '''
+
+        df = dataset[["fascia", "avg(pioggia)", "temp_min", "temp_max", "id_prec_prob", "id_prec_int", "id_vento_val",
+                      "id_vento_dir_val"]]
+        df = df.dropna()
+        indexDel = df[(df['id_prec_prob'] == -1) | (df['id_prec_int'] == -1)].index
+
+        df.drop(indexDel, inplace=True)
+
+        return df
+
+
+    def prepare_df_path(self, df_path): # df_path -> 'csv files/accuracy_12.csv'
+        '''
+        Given the df path, it selects the needed columns and removes NaN/incorrect valus
+        :param df_path:
+        :return:
+        '''
+
+        df = pd.read_csv(df_path)
+
+        return self.prepare_df(df)
+
+
+    def regr_dummies(self, df, file_regr, file_coeff):
+        '''
+        Given a df, it create X, y for the regression and perform multiple regression with dummy variables if qualitative,
+        it returns the regression coefficients and the trained model
+        :param df:
+        :return:
+        '''
+
+        df_1 = df[["fascia", "id_prec_prob", "id_prec_int", "id_vento_val"]]
+
+        col_names = list(df_1)
+        for col in col_names:
+            df_1[col] = df_1[col].astype('category',copy=False)
+
+        df_1 = pd.get_dummies(df_1)
+        df_1["temp_min"] = df["temp_min"]
+        df_1["temp_max"] = df["temp_max"]
+
+        print(df_1)
+        print(df_1.columns)
+
+        # data preprocessing
+        X = df_1.iloc[:, :].values
+        y = df.iloc[:, 1].values
+
+        # X, y for regression
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.00000000000000001, random_state=0)
+
+        # Fitting the model
+        regressor = LinearRegression()
+        regressor.fit(X_train, y_train)
+
+        # Save the model
+        #filename = 'models/regr_model_dummies.sav'
+        pickle.dump(regressor, open(file_regr, 'wb'))
+
+        # Coefficients
+        coeff = regressor.coef_
+        # Save coefficients
+        pickle.dump(coeff, open(file_coeff, 'wb'))
+
+        return regressor.coef_, regressor
+
+
+    def regr_dummies_pred(self, filename, X):
+        '''
+        Given the regression model and the new X, it predicts the y (avg of rain)
+        :param regressor:
+        :param X:
+        :return:
+        '''
+
+        regressor = pickle.load(open(filename, 'rb'))
+
+        # predicting the test set results
+        y_pred = regressor.predict(X)
+        if y_pred < 0:
+            y_pred = 0
+
+        return y_pred
+
+
+if __name__ == "__main__":
+
+    mod = Model()
+    df_spark = mod.get_df_spark()
+    df = mod.prepare_df(df_spark)
+    # fit the model
+    regr = mod.regr_dummies(df, 'models/regr_model_dummies.sav')
+
+
+
+
+
+
+
 
 
 # TODO scegliere modello -> predire quantita di pioggia? accuratezza? oppure probabilità che piova? -> qualli variabili usare?
-# TODO quale modello usare? regressione? se abbiamo classi? regressione logistca ok solo su due classi
+# TODO quale modello usare? regressione? se abbiamo classi? regressione logistca ok solo su due classi'''
 
-#Logistic Regression / SVC
-def regression(X_list_scores, y_list_labels, list_labels_ok):
-    '''Given a list of scores of features and a list of labels for the candidates (0/1) as returned by
-    calculate_scores_labels method in filter_builder.py, it computes LogisticRegression on them and returns the
-    coefficientes of the regression, that represent the weights of the filters (features), old and predicted labels,
-    predict_proba'''
-    lr = LogisticRegression(solver='lbfgs', max_iter=1000, random_state=42, class_weight='balanced')
-    #lr = SVC(kernel='linear')
-    lr.fit(np.array(X_list_scores), np.array(y_list_labels))
-    predicted_labels = lr.predict(X_list_scores)
-    predict_proba = lr.predict_proba(X_list_scores)
-    coef = lr.coef_
-    print("list scores before", X_list_scores)
-    print("list labels before", y_list_labels)
-    #print("new predicted labels", predicted_labels)
-    #print("coef", lr.coef_)
-    print("predict_proba", predict_proba.tolist())
-    #print("regression score", lr.score(np.array(list_scores_labels[0]), np.array(list_scores_labels[1])))
-    print("regression score y predicted labels / labels ok", lr.score(np.array(X_list_scores), np.array(list_labels_ok)))
-    #print("regression score y data /labels ok", lr.score(np.array(predicted_labels), np.array(list_labels_ok)))
-    zip_label = list(zip(*[y_list_labels, predicted_labels, list_labels_ok]))
-    print("zip labels before, predicted, right", zip_label)
-    return [zip_label, coef, predict_proba, predicted_labels]
-
-
-
-
-
-
-
-
-
-
-# With training and test
-def regression_1(X_train, y_train, X_test, y_test):
-    '''Given a list of scores of features and a list of labels for the candidates (0/1) as returned by
-    calculate_scores_labels method in filter_builder.py, it computes LogisticRegression on them and returns the
-    coefficientes of the regrssion, that represent the weights of the filters (features)'''
-    lr = LogisticRegression(solver='lbfgs', max_iter=1000, random_state=42, class_weight='balanced')
-    #lr = SVC(kernel='linear')
-    lr.fit(np.array(X_train), np.array(y_train))
-    y_pred = lr.predict(X_test)
-    print("accuracy score", accuracy_score(y_test, y_pred))
-    coef = lr.coef_
-    print("X_train", X_train)
-    print("y_train", y_train)
-    print("X_train", X_test)
-    print("y_train", y_test)
-    print("coef", lr.coef_)
-    print("y_pred", y_pred)
-    #print("regression score", lr.score(np.array(list_scores_labels[0]), np.array(list_scores_labels[1])))
-    #print("zip labels before and later", list(zip(list_scores_labels[1], predicted_labels)))
-    '''lr.fit(np.array(list_scores_labels[0]), np.array(list_scores_labels[1]))
-    predicted_labels_2 = lr.predict(list_scores_labels[0])
-    print("list scores_2", list_scores_labels[0])
-    print("list labels_2", list_scores_labels[1])
-    print("coef_2", lr.coef_)
-    print("new predicted labels_2", predicted_labels_2)
-    print("regression score_2", lr.score(np.array(list_scores_labels[0]), np.array(list_scores_labels[1])))
-    print("zip labels before and later_2", list(zip(list_scores_labels[1], predicted_labels_2)))'''
-    return coef
-
-
-
-
-#Decision Tree
-def regression_2(list_scores_labels):
-    '''Given a list of scores of features and a list of labels for the candidates (0/1) as returned by
-    calculate_scores_labels method in filter_builder.py, it computes LogisticRegression on them and returns the
-    coefficientes of the regrssion, that represent the weights of the filters (features)'''
-    lr = DecisionTreeClassifier(random_state=0)
-    lr.fit(np.array(list_scores_labels[0]), np.array(list_scores_labels[1]))
-    predicted_labels = lr.predict(list_scores_labels[0])
-    print("list scores", list_scores_labels[0])
-    print("list labels", list_scores_labels[1])
-    print("new predicted labels", predicted_labels)
-    print("regression score", lr.score(np.array(list_scores_labels[0]), np.array(list_scores_labels[1])))
-    print("zip labels before and later", list(zip(list_scores_labels[1], predicted_labels)))
-    return 0
