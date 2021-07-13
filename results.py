@@ -4,6 +4,8 @@ from pyspark.sql import SparkSession
 import argparse
 
 
+
+
 def acc_prev(df, columns, localita):
     '''
     Given the df containing the comparisons between observations and predictions, it returns the total accuracy for one
