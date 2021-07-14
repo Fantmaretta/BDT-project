@@ -50,10 +50,10 @@ parameters.
 
 Run the python script `results.py` to simulate the predicition of falling rain for tomorrow or to compute the accuracy
 of some measures in specific stations given some parameters, which can be set:
-    - `-rain_acc`:
+    * `-rain_acc`:
         - 0 -> if you want to get rain prediction
         - 1 -> if you want to get accuracies for a particular station
-    - if `-rain_acc` is 0:
+    * if `-rain_acc` is 0:
         - `-temp_min` -> insert a float indicating the minimum temperature predicted
         - `-temp_max` -> insert a float indicating the maximum temperature predicted
         - `-rain_prob`:
