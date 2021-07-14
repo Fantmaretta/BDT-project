@@ -43,7 +43,7 @@ parameters.
 3) Python packages (listed in the file *requirements.txt*)
 4) It is recommended to create and activate a virtual environment in the project's folder
 
-- Inside the virtual environment install the required packages with the command:
+- Inside the virtual environment install the required packages with the command:\n
     `pip install -r requirements.txt`
   
 - NB: to run other parts of the project it is necessary to have also `spark`
