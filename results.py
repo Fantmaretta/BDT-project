@@ -2,6 +2,8 @@ from models import Model
 import pyspark.sql.functions as F
 from pyspark.sql import SparkSession
 import argparse
+import mysql.connector
+import pandas as pd
 
 
 
@@ -25,6 +27,7 @@ def acc_prev(df, columns, localita):
                .withColumn('fraction', F.expr('count/total')))
 
         res.show()
+
 
 
 
@@ -63,16 +66,17 @@ if __name__ == "__main__":
                         type=str,
                         default='total',
                         help='locality for accuracy')
-    parser.add_argument('-days',
+    '''parser.add_argument('-days',
                         type=str,
                         default='1-2',
-                        help='accuracy on following day 1-2 or 3-4-5')
+                        help='accuracy on following day 1-2 or 3-4-5')'''
     parser.add_argument('-type',
                         type=int,
                         default='0',
                         help='accuracy on everything (0), rain (1), wind\'s intensity/direction (2), max/min temperature (3)')
 
     args = parser.parse_args()
+
 
     if args.rain_acc == 0:
 
@@ -156,42 +160,47 @@ if __name__ == "__main__":
               mod.regr_dummies_pred('models/regr_model_dummies.sav', X))
 
 
-
     else:
 
-        if args.days == '1-2':
-            query = """SELECT compare_pioggia, compare_vento_vel, compare_vento_dir, compare_temp_max, compare_temp_min FROM bdt_db_mysql.results_12 WHERE localita = '{}'""".format(args.localita)
-        else:
-            query = """SELECT compare_pioggia, compare_vento_vel, compare_vento_dir, compare_temp_max, compare_temp_min FROM bdt_db_mysql.results_345 WHERE localita = '{}'""".format(args.localita)
+        connection = mysql.connector.connect(
+            host="bdtmysql.cvpe8im7hapy.us-east-2.rds.amazonaws.com",
+            port=3306,
+            database="bdt_db_mysql",
+            user="root_bdt",
+            password="bdt_mysql"
+        )
+        connection.autocommit = True
+
+        cursor = connection.cursor()
 
         if args.type == 0:
-            columns = ['compare_pioggia', 'compare_vento_vel', 'compare_vento_dir', 'compare_temp_max', 'compare_temp_min']
+            query = """SELECT * FROM bdt_db_mysql.results_fin_loc WHERE localita = '{}'""".format(args.localita)
+            cursor.execute(query)
         elif args.type == 1:
-            columns = ['compare_pioggia']
+            query = """SELECT * FROM bdt_db_mysql.results_fin_loc WHERE localita = %s and measure = %s"""
+            cursor.execute(query, (args.localita, 'compare_pioggia'))
         elif args.type == 2:
-            columns = ['compare_vento_vel', 'compare_vento_dir']
+            query = """SELECT * FROM bdt_db_mysql.results_fin_loc WHERE localita = %s and (measure = %s or measure = %s)"""
+            cursor.execute(query, (args.localita, 'compare_vento_vel', 'compare_vento_dir'))
         else:
-            columns = ['compare_temp_max', 'compare_temp_min']
+            query = """SELECT * FROM bdt_db_mysql.results_fin_loc WHERE localita = %s and (measure = %s or measure = %s)"""
+            cursor.execute(query, (args.localita, 'compare_temp_min', 'compare_temp_max'))
 
 
-        sparkConnector = SparkSession.builder.appName("Connector_to_MySQL_BDT") \
-            .config("spark.driver.extraClassPath",
-                    "JDBC_connector/mysql-connector-java-8.0.25.jar") \
-            .master('local[*]') \
-            .enableHiveSupport() \
-            .getOrCreate()
+        d = {'localita': [], 'measure type': [], 'accuracy': [], 'observed': [], 'total': [], 'fraction': []}
+        df = pd.DataFrame(data=d)
 
+        row = cursor.fetchone()
 
-        df = sparkConnector.read \
-            .format("jdbc") \
-            .option("url", "jdbc:mysql://bdtmysql.cvpe8im7hapy.us-east-2.rds.amazonaws.com:3306") \
-            .option("user", "root_bdt") \
-            .option("password", "bdt_mysql") \
-            .option("driver", 'com.mysql.cj.jdbc.Driver') \
-            .option("query", query) \
-            .load()
-        # .option("dbtable", "bdt_db_mysql.dati_reali")
-        df.show()
+        print("The accuracy levels:\n 1.0 = low accuracy\n 2.0 = medium accuracy\n 3.0 = high accuracy\n")
+        while row is not None:
+            new_row = {'localita': row[0], 'measure type': row[1], 'accuracy': row[2], 'observed': row[3], 'total': \
+                row[4], 'fraction': row[5]}
+            row = cursor.fetchone()
+            df = df.append(new_row, ignore_index=True)
 
-        # compute accuracy on the requested
-        acc_prev(df, columns, args.localita)
+        df = df.sort_values(by=['measure type', 'accuracy'])
+
+        print(df.to_string())
+
+        cursor.close()
