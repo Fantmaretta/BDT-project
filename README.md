@@ -48,7 +48,7 @@ parameters.
   
 - NB: to run other parts of the project it is necessary to have also `spark`
 
-#### Execution
+### Execution of the file `results.py`
 
 Run the python script `results.py` to simulate the predicition of falling rain for tomorrow or to compute the accuracy
 of some measures in specific stations given some parameters, which can be set:
@@ -79,7 +79,7 @@ of some measures in specific stations given some parameters, which can be set:
         - 2 to get accuracy for wind intensity and speed
         - 3 to get accuracy for min and max temperature
     
-#### Web app
+### Web app
 Through the following link you can browse through the application that shows you the previous results 
 https://NUBMQUCVUXCNACKB.anvil.app/SK2BSWAY7BLEZKJSWFOVY3MB
     
