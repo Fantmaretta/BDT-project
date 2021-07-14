@@ -39,6 +39,17 @@ parameters.
 ### Requirements
 
 #### To run the file `results.py`
+1) `Python 3.8` or more
+2) `MySql`
+3) Python packages (listed in the file *requirements.txt*)
+4) It is recommended to create and activate a virtual environment in the project's folder
+
+- Inside the virtual environment install the required packages with the command:
+    `pip install -r requirements.txt`
+
+- Run the python script `results.py`
+
+
 
 
 
