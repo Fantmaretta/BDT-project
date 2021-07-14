@@ -43,7 +43,7 @@ parameters.
 3) Python packages (listed in the file *requirements.txt*)
 4) It is recommended to create and activate a virtual environment in the project's folder
 
-- Inside the virtual environment install the required packages with the command:\n
+- Inside the virtual environment install the required packages with the command:
     `pip install -r requirements.txt`
   
 - NB: to run other parts of the project it is necessary to have also `spark`
@@ -78,6 +78,10 @@ of some measures in specific stations given some parameters, which can be set:
         - 1 to get accuracy for rain intensity
         - 2 to get accuracy for wind intensity and speed
         - 3 to get accuracy for min and max temperature
+    
+#### Web app
+Through the following link you can browse through the application that shows you the previous results 
+https://NUBMQUCVUXCNACKB.anvil.app/SK2BSWAY7BLEZKJSWFOVY3MB
     
 
 
