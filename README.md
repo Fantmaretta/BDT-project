@@ -36,9 +36,8 @@ parameters.
     
 ## Execution
 
-### Requirements
+### Requirements to run the file `results.py`
 
-#### To run the file `results.py`
 1) `Python 3.8` or more
 2) `MySql`
 3) Python packages (listed in the file *requirements.txt*)
@@ -47,7 +46,37 @@ parameters.
 - Inside the virtual environment install the required packages with the command:
     `pip install -r requirements.txt`
 
-- Run the python script `results.py`
+#### Execution
+
+Run the python script `results.py` to simulate the predicition of falling rain for tomorrow or to compute the accuracy
+of some measures in specific stations given some parameters, which can be set:
+    - `-rain_acc`:
+        - 0 -> if you want to get rain prediction
+        - 1 -> if you want to get accuracies for a particular station
+    - if `-rain_acc` is 0:
+        - `-temp_min` -> insert a float indicating the minimum temperature predicted
+        - `-temp_max` -> insert a float indicating the maximum temperature predicted
+        - `-rain_prob`:
+            - 0 if predicted rain probability is < 25%
+            - 1 if predicted rain probability is 25%-50%
+            - 2 if predicted rain probability is 50%-75%
+            - 3 if predicted rain probability is > 75%
+        - `-rain_int`:
+            - 0 if predicted rain intensity is low
+            - 1 if predicted rain intensity is medium
+            - 2 if predicted rain intensity is high
+        - `-wind_speed`:
+            - 0 if predicted wind speed is < 0.5 m/s
+            - 1 if predicted wind speed is 0.5-4 m/s
+            - 2 if predicted wind speed is 4-8 m/s
+    - if `rain_acc` is 1:
+        - `-localita` -> insert the name of a station
+        - `-type`:
+            - 0 to get accuracy for everything
+            - 1 to get accuracy for rain intensity
+            - 2 to get accuracy for wind intensity and speed
+            - 3 to get accuracy for min and max temperature
+
 
 
 
