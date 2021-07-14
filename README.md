@@ -33,6 +33,13 @@ parameters.
     - `models.py` defines the regression model to predict the quantity of falling rain
 - File for **display for the user**
     - `results.py` returns some accuracies for different stations and the prediction for the rain's quantity
+    
+## Execution
+
+### Requirements
+
+#### To run the file `results.py`
+
 
 
 
