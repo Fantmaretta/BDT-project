@@ -36,7 +36,7 @@ parameters.
     
 ## Execution
 
-### Requirements to run the file `results.py`
+### Requirements to run the script `results.py`
 
 1) `Python 3.8` or more
 2) `MySql`
@@ -48,7 +48,7 @@ parameters.
   
 - NB: to run other parts of the project it is necessary to have also `spark`
 
-### Execution of the file `results.py`
+### Execution of the script `results.py`
 
 Run the python script `results.py` to simulate the predicition of falling rain for tomorrow or to compute the accuracy
 of some measures in specific stations given some parameters, which can be set:
