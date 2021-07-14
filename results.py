@@ -1,6 +1,5 @@
 from models import Model
 import pyspark.sql.functions as F
-from pyspark.sql import SparkSession
 import argparse
 import mysql.connector
 import pandas as pd
