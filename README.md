@@ -50,7 +50,7 @@ parameters.
 
 ### Execution of the script `results.py`
 
-Run the python script `results.py` to simulate the predicition of falling rain for tomorrow or to compute the accuracy
+Run the python script `results.py` to simulate the prediction of falling rain for tomorrow or to compute the accuracy
 of some measures in specific stations given some parameters, which can be set:
 * `-rain_acc`:
     - 0 -> if you want to get rain prediction
