@@ -45,6 +45,8 @@ parameters.
 
 - Inside the virtual environment install the required packages with the command:
     `pip install -r requirements.txt`
+  
+- NB: to run other parts of the project it is necessary to have also `spark`
 
 #### Execution
 
@@ -69,13 +71,15 @@ of some measures in specific stations given some parameters, which can be set:
         - 0 if predicted wind speed is < 0.5 m/s
         - 1 if predicted wind speed is 0.5-4 m/s
         - 2 if predicted wind speed is 4-8 m/s
-- if `rain_acc` is 1:
+* if `rain_acc` is 1:
     - `-localita` -> insert the name of a station
     - `-type`:
         - 0 to get accuracy for everything
         - 1 to get accuracy for rain intensity
         - 2 to get accuracy for wind intensity and speed
         - 3 to get accuracy for min and max temperature
+    
+
 
 
 
