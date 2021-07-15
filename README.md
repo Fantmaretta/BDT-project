@@ -11,6 +11,8 @@ parameters.
 - The folder `models` contains the regression model created to predict the quantity of rain and a pickle file with the 
   saved coefficients
 - Files for the **data collection**, **preparation** and **storage**
+    - `station_anagrafica.py` defines the functions to, given the url with stations information and the name of the file 
+      that will contain stations names, extract stations codes, names and save them
     - `prediction.py` defines the class *Previsione* and the functions to store the data about the predictions into a 
       Mysql database
     - `dati_reali.py` defines the class *DatiReali* and the functions to store the data about the observations into a 
@@ -28,8 +30,8 @@ parameters.
     - `join_df.py` matches data from predictions and observations marking if there is correspondence between them
     - `write_data.py` stores the modified and joint data into new tables in the database
 - Files for **data analysis** and **statistics**
-    - `computation.py` defines the functions to evaluate the accuracy of the predictions (low, medium, high) and to 
-        compute the accuracy per day, station, and type of observation
+    - `computation.py` evaluates the accuracy of the predictions (low, medium, high) and
+        computes the accuracy per day, station, and type of observation
     - `models.py` defines the regression model to predict the quantity of falling rain
 - File for **display for the user**
     - `results.py` returns some accuracies for different stations and the prediction for the rain's quantity
