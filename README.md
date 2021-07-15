@@ -85,8 +85,7 @@ of some measures in specific stations given some parameters, which can be set:
     
 ### Web app
 Through the following link you can browse through the application that shows you the previous results 
-https://NUBMQUCVUXCNACKB.anvil.app/SK2BSWAY7BLEZKJSWFOVY3MB
-    
+https://PCIDJP27XLCXNFR7.anvil.app/SPKJ7RZXFW5E4UXBLRAFA55C    
 
 
 
