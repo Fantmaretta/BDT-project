@@ -155,8 +155,8 @@ if __name__ == "__main__":
         X = [input]
 
         mod = Model()
-        print("The predicted quantity of rain is:",
-              mod.regr_dummies_pred('models/regr_model_dummies.sav', X))
+        print("The predicted quantity of rain in the selected time range for tomorrow is:",
+              mod.regr_dummies_pred('models/regr_model_dummies.sav', X), 'mm')
 
 
     else:
