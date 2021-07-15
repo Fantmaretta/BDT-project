@@ -127,7 +127,11 @@ class Model:
         if y_pred < 0:
             y_pred = 0
 
-        return y_pred
+        y_pred_tot = 24*y_pred
+        if y_pred_tot < 1:
+            y_pred_tot = 0
+
+        return y_pred_tot
 
 
 if __name__ == "__main__":
@@ -138,14 +142,4 @@ if __name__ == "__main__":
     # fit the model
     regr = mod.regr_dummies(df, 'models/regr_model_dummies.sav', 'models/coeff.pickle')
 
-
-
-
-
-
-
-
-
-# TODO scegliere modello -> predire quantita di pioggia? accuratezza? oppure probabilità che piova? -> qualli variabili usare?
-# TODO quale modello usare? regressione? se abbiamo classi? regressione logistca ok solo su due classi'''
 
