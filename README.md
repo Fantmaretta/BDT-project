@@ -48,7 +48,9 @@ parameters.
 - Inside the virtual environment install the required packages with the command:
     `pip install -r requirements.txt`
   
-- NB: to run other parts of the project it is necessary to have also `spark`
+- NB: to run other parts of the project it is necessary to have also `Spark`. The MySQL Connector/J (the official JDBC 
+  driver for MySQL) is needed to use `PySpark` on your machine and to connect to the database. It is stored in the folder
+  `JDBC_connector`
 
 ### Execution of the script `results.py`
 
