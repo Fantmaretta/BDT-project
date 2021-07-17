@@ -17,9 +17,9 @@ parameters.
     - `dati_reali.py` defines the class *DatiReali* and the functions to store the data about the observations into a 
       Mysql database
     - `fetch_previsioni.py` defines the functions to get the data about the predictions from the website, to parse the 
-      xml related to them, and it stores the data into the database
-    - `fetch_dati_reali.py` defines the functions to get the data about the observations from the website, to parse the 
       json related to them, and it stores the data into the database
+    - `fetch_dati_reali.py` defines the functions to get the data about the observations from the website, to parse the 
+      xml related to them, and it stores the data into the database
 - Files for the **data elaboration** and **preparation** for the analysis
     - `read_data.py` reads data stored into the databese and computes the time ranges for the collected data
     - `modify_previsioni.py` defines the functions to compute some preliminary computations on predictions data to prepare 
