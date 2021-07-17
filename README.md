@@ -77,6 +77,30 @@ of some measures in specific stations given some parameters, which can be set:
         - 2 if predicted wind speed is 4-8 m/s
 * if `rain_acc` is 1:
     - `-localita` -> insert the name of a station
+        List of possible stations to insert: 
+        - ala
+        - aldeno
+        - arco
+        - canazei
+        - castello tesino
+        - cavalese
+        - cles
+        - daone
+        - grigno
+        - levico
+        - mezzano
+        - mezzolombardo
+        - moena
+        - passo pian delle fugazze
+        - peio
+        - pergine valsugana
+        - pinzolo
+        - predazzo
+        - rabbi
+        - rovereto
+        - san lorenzo in banale
+        - torbole
+        - trento
     - `-type`:
         - 0 to get accuracy for everything
         - 1 to get accuracy for rain intensity
