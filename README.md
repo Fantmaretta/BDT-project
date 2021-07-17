@@ -11,7 +11,7 @@ parameters.
 - The folder `models` contains the regression model created to predict the quantity of rain and a pickle file with the 
   saved coefficients
 - Files for **data collection**, **preparation** and **storage**
-    - `station_anagrafica.py` defines the functions to extract stations codes and names from the XML at the specified url
+    - `station_anagrafica.py` defines the functions to extract stations codes and names from the xml at the specified url
     - `prediction.py` defines the class *Previsione* and the functions to store the data about the predictions into a 
       Mysql database
     - `dati_reali.py` defines the class *DatiReali* and the functions to store the data about the observations into a 
