@@ -173,7 +173,7 @@ if __name__ == "__main__":
         cursor = connection.cursor()
 
         if args.type == 0:
-            query = """SELECT * FROM bdt_db_mysql.results_fin_loc WHERE localita = '{}'""".format(args.localita)
+            query = """SELECT * FROM bdt_db_mysql.results_fin_loc WHERE localita = '{}'""".format((args.localita).lower)
             cursor.execute(query)
         elif args.type == 1:
             query = """SELECT * FROM bdt_db_mysql.results_fin_loc WHERE localita = %s and measure = %s"""
