@@ -76,8 +76,7 @@ of some measures in specific stations given some parameters, which can be set:
         - 2 if predicted wind speed is 4-8 m/s 
 
 2) if `rain_acc` is 1:
-    - `-localita` -> insert the name of a station
-        List of possible stations to insert: 
+    - `-localita` -> insert the name of a station. Here the list of possible stations to insert: 
         - ala
         - aldeno
         - arco
