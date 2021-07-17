@@ -65,10 +65,6 @@ if __name__ == "__main__":
                         type=str,
                         default='total',
                         help='locality for accuracy')
-    '''parser.add_argument('-days',
-                        type=str,
-                        default='1-2',
-                        help='accuracy on following day 1-2 or 3-4-5')'''
     parser.add_argument('-type',
                         type=int,
                         default='0',
