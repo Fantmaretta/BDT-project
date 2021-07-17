@@ -10,17 +10,16 @@ parameters.
 ### Files and Folders
 - The folder `models` contains the regression model created to predict the quantity of rain and a pickle file with the 
   saved coefficients
-- Files for the **data collection**, **preparation** and **storage**
-    - `station_anagrafica.py` defines the functions to, given the url with stations information and the name of the file 
-      that will contain stations names, extract stations codes, names and save them
+- Files for **data collection**, **preparation** and **storage**
+    - `station_anagrafica.py` defines the functions to extract stations codes and names from the xml at the specified url
     - `prediction.py` defines the class *Previsione* and the functions to store the data about the predictions into a 
       Mysql database
     - `dati_reali.py` defines the class *DatiReali* and the functions to store the data about the observations into a 
       Mysql database
-    - `fetch_dati_reali.py` defines the functions to get the data about the predictions from the website, to parse the 
-      xml related to them, and it stores the data into the database
-    - `fetch_dati_reali.py` defines the functions to get the data about the observations from the website, to parse the 
+    - `fetch_previsioni.py` defines the functions to get the data about the predictions from the website, to parse the 
       json related to them, and it stores the data into the database
+    - `fetch_dati_reali.py` defines the functions to get the data about the observations from the website, to parse the 
+      xml related to them, and it stores the data into the database
 - Files for the **data elaboration** and **preparation** for the analysis
     - `read_data.py` reads data stored into the databese and computes the time ranges for the collected data
     - `modify_previsioni.py` defines the functions to compute some preliminary computations on predictions data to prepare 
@@ -77,8 +76,7 @@ of some measures in specific stations given some parameters, which can be set:
         - 2 if predicted wind speed is 4-8 m/s 
 
 2) if `rain_acc` is 1:
-    - `-localita` -> insert the name of a station
-        List of possible stations to insert: 
+    - `-localita` -> insert the name of a station. Here the list of possible stations to insert: 
         - ala
         - aldeno
         - arco
