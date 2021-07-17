@@ -11,7 +11,10 @@ os.path.dirname(os.path.abspath(__file__))
 
 
 def create_times_day():
-    '''Create list of time every 15 minutes'''
+    '''
+    Create list of time every 15 minutes
+    :return:
+    '''
 
     spacing = 15    # in minutes
     lst = [(datetime.strptime(str(i * timedelta(minutes=spacing)), '%H:%M:%S')).time() for i in range(24 * 60 // spacing)]
