@@ -59,7 +59,7 @@ of some measures in specific stations given some parameters, which can be set:
 * `-rain_acc`:
     - 0 -> if you want to get rain prediction
     - 1 -> if you want to get accuracies for a particular station
-* if `-rain_acc` is 0:
+1) if `-rain_acc` is 0:
     - `-temp_min` -> insert a float indicating the minimum temperature predicted
     - `-temp_max` -> insert a float indicating the maximum temperature predicted
     - `-rain_prob`:
@@ -76,7 +76,7 @@ of some measures in specific stations given some parameters, which can be set:
         - 1 if predicted wind speed is 0.5-4 m/s
         - 2 if predicted wind speed is 4-8 m/s 
 
-* if `rain_acc` is 1:
+2) if `rain_acc` is 1:
     - `-localita` -> insert the name of a station
         List of possible stations to insert: 
         - ala
@@ -105,8 +105,8 @@ of some measures in specific stations given some parameters, which can be set:
         - 3 to get accuracy for min and max temperature
  
 #### Examples
-Example: python3 results.py -rain_acc 0 -temp_min 20 -temp_max 25 -rain_prob 3 -rain_int 2 -wind_speed 0   
-Example: python3 results.py -rain_acc 1 -localita "trento" -type 3
+1) python3 results.py -rain_acc 0 -temp_min 20 -temp_max 25 -rain_prob 3 -rain_int 2 -wind_speed 0   
+2) python3 results.py -rain_acc 1 -localita "trento" -type 3
     
 ### Web app
 Through the following link you can browse through the application that shows you the previous results 
