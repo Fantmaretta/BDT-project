@@ -2,7 +2,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf, col
 from pyspark.sql.types import StringType
 
-# from 07-05 to 02-07
+
 
 def initialize_df_d(df_path):
     '''
