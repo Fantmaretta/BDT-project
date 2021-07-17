@@ -16,7 +16,7 @@ parameters.
       Mysql database
     - `dati_reali.py` defines the class *DatiReali* and the functions to store the data about the observations into a 
       Mysql database
-    - `fetch_dati_reali.py` defines the functions to get the data about the predictions from the website, to parse the 
+    - `fetch_previsioni.py` defines the functions to get the data about the predictions from the website, to parse the 
       xml related to them, and it stores the data into the database
     - `fetch_dati_reali.py` defines the functions to get the data about the observations from the website, to parse the 
       json related to them, and it stores the data into the database
