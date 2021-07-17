@@ -255,7 +255,7 @@ def read_files(directory):
 
         i += 1
 
-    df_fin.to_csv('results/res_final_loc.csv', )
+    df_fin.to_csv('csv files/res_final_loc.csv', )
 
 
 
@@ -289,6 +289,7 @@ if __name__ == "__main__":
     df_345 = df_345.drop(*columns_to_drop)
 
     # save df with computed accuracies
+    df_12.toPandas().to_csv('csv files/accuracy_12.csv')
     df_12.toPandas().to_csv('csv files/accuracy_12.csv')
     df_345.toPandas().to_csv('csv files/accuracy_345.csv')
 
@@ -374,12 +375,17 @@ if __name__ == "__main__":
 
     elements = ['compare_pioggia', 'compare_vento_vel', 'compare_vento_dir', 'compare_temp_max', 'compare_temp_min']
 
-    for i in range(0, 5):
-        acc_prev_giorno_loc(df_12_acc, elements[i], 'localita', 'castello tesino', 'id_previsione_giorno', 1, '12',
-                            True)
+    stations = ['ala', 'aldeno', 'arco', 'canazei', 'castello tesino', 'cavalese', 'cles', 'daone', 'grigno', 'levico',
+                     'mezzano', 'mezzolombardo', 'moena', 'passo pian delle fugazze', 'peio', 'pergine valsugana', 'pinzolo',
+                     'predazzo', 'rabbi', 'rovereto', 'san lorenzo in banale', 'torbole', 'trento']
 
-    for i in range(0, 5):
-        acc_prev_giorno_loc(df_345_acc, elements[i], 'localita', 'trento', 'id_previsione_giorno',  1, '345', True)
+    for station in stations:
+        for i in range(0, 5):
+            acc_prev_giorno_loc(df_12_acc, elements[i], 'localita', station, 'id_previsione_giorno', 1, '12',
+                                True)
+
+    #for i in range(0, 5):
+     #   acc_prev_giorno_loc(df_345_acc, elements[i], 'localita', 'trento', 'id_previsione_giorno',  1, '345', True)
 
     read_files('results_localita')
 
