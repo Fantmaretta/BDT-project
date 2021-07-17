@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import udf
+from pyspark.sql.functions import udf, col
 from pyspark.sql.types import StringType
 
 # from 07-05 to 02-07
@@ -44,6 +44,23 @@ def compute_avg(df, l, d, f, var): # on fascia
 
     return df.groupBy(l, d, f).avg(var).orderBy(d, l, f)
 
+def compute_avg_rain(df, l, d, f, var):
+    '''
+    It computes the avg (on the single fascia oraria) on one column of the df, grouped by l, d, f
+    :param df:
+    :param l: localita
+    :param d: data
+    :param f: fascia oraria
+    :param var: selected value
+    :return:
+    '''
+
+    df = df.groupBy(l, d, f).avg(var).orderBy(d, l, f)
+    df = df.withColumn('avg(pioggia)', col('avg(pioggia)') * 24)
+
+    return df
+
+
 def compute_min(df, l, d, var): # on total day, not fascia
     '''
     Ir computes the min (on total day) on one column of the df, grouped by l, d
@@ -81,7 +98,7 @@ def df_12(df_dati):
     #d_avg_temp.show()
 
     # df containing localita, data, fascia, avg pioggia
-    d_avg_pioggia = compute_avg(df_dati, 'localita', 'data', 'fascia', 'pioggia')
+    d_avg_pioggia = compute_avg_rain(df_dati, 'localita', 'data', 'fascia', 'pioggia')
     #d_avg_pioggia.show()
 
     # df containing localita, data, fascia, avg vento_velocita
@@ -107,7 +124,7 @@ def df_12(df_dati):
         .join(d_temp_min, ['localita', 'data'])\
         .join(d_temp_max, ['localita', 'data'])\
         .orderBy('data', 'localita', 'fascia')
-    joined_df.show()
+    #joined_df.show()
 
     return joined_df
 
@@ -166,7 +183,7 @@ def df_345(joined_df):
         .join(d_temp_min, ['localita', 'data'])\
         .join(d_temp_max, ['localita', 'data'])\
         .orderBy('data', 'localita', 'fascia_extended')
-    joined_df_tot.show()
+    #joined_df_tot.show()
 
     return(joined_df_tot)
 
