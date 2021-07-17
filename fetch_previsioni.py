@@ -16,6 +16,7 @@ class FetchPrevisioni:
         :param url_prediction:
         :return:
         '''
+
         #url_prediction = "https://www.meteotrentino.it/protcivtn-meteo/api/front/previsioneOpenDataLocalita?localita"
         resp_pred = requests.get(url_prediction)
         prediction = resp_pred.json()
