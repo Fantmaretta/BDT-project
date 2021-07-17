@@ -3,15 +3,16 @@ title: "plots bdt"
 output: html_document
 ---
 
+
 ```{r}
-df <- read.csv("/home/veror/Downloads/data_plots/compare_pioggia.csv")
+df <- read.csv("/home/veror/Desktop/Uni/Bid Data Technology/BDT-project/data_plots/compare_pioggia_12.csv")
 
 df$avg.compare_pioggia.[is.na(df$avg.compare_pioggia.)] <- round(mean(df$avg.compare_pioggia., na.rm = TRUE))
 df$avg.compare_pioggia. <- round(df$avg.compare_pioggia., digits = 0)
 #df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 1)] <- "inaccurate"
 #df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 2)] <- "medium"
 #df$avg.compare_pioggia.[which(df$avg.compare_pioggia. == 3)] <- "high"
-
+df$avg.compare_pioggia.
 length(df$compare_pioggia)
 na <- which(is.na(df$compare_pioggia))
 x <- which(df$compare_pioggia == 3)
@@ -174,7 +175,7 @@ summary(df_fin)
 
 
 ```{r}
-# MODEL WITH PREDICTION ABOUT INTENSITY
+# MODEL WITH PREDICTION ABOUT INTENSITY -> CORRECT ONEEEEEEEEEEEEEEEEEEE
 
 df <- read.csv("/home/veror/Desktop/Uni/Bid Data Technology/R BDT project/accuracy_12.csv")
 View(df)
@@ -224,38 +225,4 @@ summary(df_fin)
 lm_avg_pioggia <- lm(avg.avg.pioggia.. ~ ., data = df_fin)
 summary(lm_avg_pioggia)
 ```
-
-
-
-
-
-
-```{r}
-library(randomForest)
-
-df <- read.csv("/home/veror/Desktop/Uni/Bid Data Technology/R BDT project/accuracy_12.csv")
-View(df)
-df$id_prec_prob <- as.factor(df$id_prec_prob)
-df$id_prec_int <- as.factor(df$id_prec_prob)
-df$id_previsione_giorno <- as.factor(df$id_)
-
-
-
-# bagging
-set.seed(1)
-# set number of predictors (all)
-n_pred <- 3
-# bagging on the training portion of hit
-bag <- randomForest(id_prec_prob ~ id_prec_int + temp_max + temp_min, data = df, mtry=n_pred, importance=TRUE)
-bag
-#hit_bag$importance # predictors importance
-# plot importance
-varImpPlot(bag)
-```
-
-
-
-
-
-
 
