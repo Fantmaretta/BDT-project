@@ -75,6 +75,7 @@ of some measures in specific stations given some parameters, which can be set:
         - 0 if predicted wind speed is < 0.5 m/s
         - 1 if predicted wind speed is 0.5-4 m/s
         - 2 if predicted wind speed is 4-8 m/s
+    Example: python3 results.py -rain_acc 0 -temp_min 20 -temp_max 25 -rain_prob 3 -rain_int 2 -wind_speed 0
 * if `rain_acc` is 1:
     - `-localita` -> insert the name of a station
         List of possible stations to insert: 
@@ -84,18 +85,14 @@ of some measures in specific stations given some parameters, which can be set:
         - canazei
         - castello tesino
         - cavalese
-        - cles
         - daone
         - grigno
         - levico
         - mezzano
-        - mezzolombardo
-        - moena
         - passo pian delle fugazze
         - peio
         - pergine valsugana
         - pinzolo
-        - predazzo
         - rabbi
         - rovereto
         - san lorenzo in banale
@@ -106,6 +103,7 @@ of some measures in specific stations given some parameters, which can be set:
         - 1 to get accuracy for rain intensity
         - 2 to get accuracy for wind intensity and speed
         - 3 to get accuracy for min and max temperature
+    Example: python3 results.py -rain_acc 1 -localita "trento" -type 3
     
 ### Web app
 Through the following link you can browse through the application that shows you the previous results 
