@@ -99,7 +99,7 @@ of some measures in specific stations given some parameters, which can be set:
     - `-type`:
         - 0 to get accuracy for everything
         - 1 to get accuracy for rain intensity (compare_pioggia)
-        - 2 to get accuracy for wind direction (compare_wind_dir) and speed (compare_wind_vel)
+        - 2 to get accuracy for wind direction (compare_vento_dir) and speed (compare_vento_vel)
         - 3 to get accuracy for min and max temperature (compare_temp_min, compare_temp_max)
  
 #### Examples
