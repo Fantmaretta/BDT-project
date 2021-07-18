@@ -63,7 +63,7 @@ if __name__ == "__main__":
                         help='wind speed: <0.5 m/s (0), 0.5-4 m/s (1), 4-8 m/s (2)')
     parser.add_argument('-localita',
                         type=str,
-                        default='total',
+                        default='trento',
                         help='locality for accuracy')
     parser.add_argument('-type',
                         type=int,
@@ -169,17 +169,17 @@ if __name__ == "__main__":
         cursor = connection.cursor()
 
         if args.type == 0:
-            query = """SELECT * FROM bdt_db_mysql.results_fin_loc WHERE localita = '{}'""".format((args.localita).lower)
+            query = """SELECT * FROM bdt_db_mysql.results_fin_loc WHERE localita = '{}'""".format((args.localita).lower())
             cursor.execute(query)
         elif args.type == 1:
             query = """SELECT * FROM bdt_db_mysql.results_fin_loc WHERE localita = %s and measure = %s"""
-            cursor.execute(query, (args.localita, 'compare_pioggia'))
+            cursor.execute(query, ((args.localita).lower(), 'compare_pioggia'))
         elif args.type == 2:
             query = """SELECT * FROM bdt_db_mysql.results_fin_loc WHERE localita = %s and (measure = %s or measure = %s)"""
-            cursor.execute(query, (args.localita, 'compare_vento_vel', 'compare_vento_dir'))
+            cursor.execute(query, ((args.localita).lower(), 'compare_vento_vel', 'compare_vento_dir'))
         else:
             query = """SELECT * FROM bdt_db_mysql.results_fin_loc WHERE localita = %s and (measure = %s or measure = %s)"""
-            cursor.execute(query, (args.localita, 'compare_temp_min', 'compare_temp_max'))
+            cursor.execute(query, ((args.localita).lower(), 'compare_temp_min', 'compare_temp_max'))
 
 
         d = {'localita': [], 'measure type': [], 'accuracy': [], 'observed': [], 'total': [], 'fraction': []}
