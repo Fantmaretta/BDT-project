@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
     # save df_345 into table dbtable_345 in the database
 
-    '''df_345 = spark.read.csv('csv files/accuracy_345.csv', header=True, sep=",")
+    df_345 = spark.read.csv('csv files/accuracy_345.csv', header=True, sep=",")
     df_345.show()
 
     df_345.select("*").write.format("jdbc") \
@@ -54,13 +54,12 @@ if __name__ == "__main__":
       .option("dbtable", dbtable_345) \
       .option("user", user) \
       .option("password", password) \
-      .save()'''
-
+      .save()
 
 
     # save df with final results on localities into table dbtable_fin_loc in the database
 
-    '''df_loc = spark.read.csv('csv files/res_final_loc.csv', header=True, sep=",")
+    df_loc = spark.read.csv('csv files/res_final_loc.csv', header=True, sep=",")
     df_loc.show()
 
     df_loc.select("*").write.format("jdbc") \
@@ -69,7 +68,7 @@ if __name__ == "__main__":
         .option("dbtable", dbtable_fin_loc) \
         .option("user", user) \
         .option("password", password) \
-        .save()'''
+        .save()
 
 
 
