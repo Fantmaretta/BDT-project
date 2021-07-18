@@ -98,9 +98,9 @@ of some measures in specific stations given some parameters, which can be set:
         - trento
     - `-type`:
         - 0 to get accuracy for everything
-        - 1 to get accuracy for rain intensity
-        - 2 to get accuracy for wind intensity and speed
-        - 3 to get accuracy for min and max temperature
+        - 1 to get accuracy for rain intensity (compare_pioggia)
+        - 2 to get accuracy for wind direction (compare_wind_dir) and speed (compare_wind_vel)
+        - 3 to get accuracy for min and max temperature (compare_temp_min, compare_temp_max)
  
 #### Examples
 1) python3 results.py -rain_acc 0 -temp_min 20 -temp_max 25 -rain_prob 3 -rain_int 2 -wind_speed 0   
