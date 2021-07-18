@@ -1,4 +1,4 @@
-# Weather forecast accuracy in Trentino
+# Weather forecast's accuracy in Trentino
 
 The aim of this project is to analyze the accuracy of the weather forecast in Trentino thanks to the data about 
 observations and predictions collected through *OpenDataTrentino* web sites.
