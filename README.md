@@ -108,7 +108,7 @@ of some measures in specific stations given some parameters (the default one are
         - 3 to get accuracy for min and max temperature (compare_temp_min, compare_temp_max)
  
 #### Examples
-1) python3 results.py -rain_acc 0 -fascia 2 -temp_min 20 -temp_max 25 -rain_prob 3 -rain_int 2 -wind_speed 0   
+1) python3 results.py -rain_acc 0 -fascia 2 -temp_min 20 -temp_max 25 -rain_prob 3 -rain_int 2 -wind_speed 0  
 2) python3 results.py -rain_acc 1 -localita "trento" -type 3
     
 ### Web app
