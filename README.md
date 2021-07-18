@@ -107,7 +107,7 @@ of some measures in specific stations given some parameters, which can be set:
 2) python3 results.py -rain_acc 1 -localita "trento" -type 3
     
 ### Web app
-Through the following link you can browse through the application that shows you the previous results 
+Through the following link you can browse through the application that shows you the results 
 https://PCIDJP27XLCXNFR7.anvil.app/SPKJ7RZXFW5E4UXBLRAFA55C    
 
 
