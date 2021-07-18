@@ -59,6 +59,11 @@ of some measures in specific stations given some parameters, which can be set:
     - 0 -> if you want to get rain prediction
     - 1 -> if you want to get accuracies for a particular station
 1) if `-rain_acc` is 0:
+    - `-fascia`:
+        - 0 if interested time range is 00-06
+        - 1 if interested time range is 06-12
+        - 2 if interested time range is 12-18
+        - 3 if interested time range is 18-24
     - `-temp_min` -> insert a float indicating the minimum temperature predicted
     - `-temp_max` -> insert a float indicating the maximum temperature predicted
     - `-rain_prob`:
