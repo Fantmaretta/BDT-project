@@ -113,7 +113,7 @@ of some measures in specific stations given some parameters (the default one are
     
 ### Web app
 Through the following link you can browse through the application that shows you the results 
-https://PCIDJP27XLCXNFR7.anvil.app/SPKJ7RZXFW5E4UXBLRAFA55C    
+https://PCIDJP27XLCXNFR7.anvil.app/SPKJ7RZXFW5E4UXBLRAFA55C
 
 
 
